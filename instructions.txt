@@ -1,0 +1,16 @@
+********************************************************************************
+INSTRUCTIONS
+********************************************************************************
+Just drop into your modules folder or use the box-cli to install
+
+box install cbstorages
+
+The module registers the following storages
+* application@cbstorages
+* client@cbstorages
+* cookie@cbstorages
+* cluster@cbstorages
+* session@cbstorages
+
+The cluster and cookie storages also have some configuration data that can 
+be set in the module's configuration CFC.
