@@ -17,6 +17,7 @@ Holy Ghost which is given unto us. ." Romans 5:5
 WELCOME TO THE CBSTORAGES MODULE
 ********************************************************************************
 Created & copyright by Luis Majano (Ortus Solutions, Corp)
+A collection of model objects to facade and help with native ColdFusion extensions
 
 ********************************************************************************
 LICENSE
@@ -33,9 +34,8 @@ Source
 ********************************************************************************
 SYSTEM REQUIREMENTS
 ********************************************************************************
-- Railo 3.2 and above
-- ColdFusion MX 9 and above
-- ColdBox 3.5 and above
+- Railo 4+
+- ColdFusion 9+
 
 ----
 

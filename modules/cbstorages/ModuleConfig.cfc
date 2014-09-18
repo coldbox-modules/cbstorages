@@ -12,6 +12,8 @@ component {
 	this.layoutParentLookup = true;
 	// Module Entry Point
 	this.entryPoint			= "cbstorages";
+	// Auto Map Models
+	this.autoMapModels		= false;
 
 	function configure(){
 
@@ -31,17 +33,17 @@ component {
 
 		// Binder Mappings
 		binder.map( "application@cbstorages" )
-			.to( "#moduleMapping#.model.ApplicationStorage" );
+			.to( "#moduleMapping#.models.ApplicationStorage" );
 		binder.map( "client@cbstorages" )
-			.to( "#moduleMapping#.model.ClientStorage" );
+			.to( "#moduleMapping#.models.ClientStorage" );
 		binder.map( "cluster@cbstorages" )
-			.to( "#moduleMapping#.model.ClusterStorage" )
+			.to( "#moduleMapping#.models.ClusterStorage" )
 			.initArg( name="appName", value=settings.clusterStorage.clusterAppName );
 		binder.map( "cookie@cbstorages" )
-			.to( "#moduleMapping#.model.CookieStorage" )
+			.to( "#moduleMapping#.models.CookieStorage" )
 			.initArg( name="settings", value=settings.cookieStorage );
 		binder.map( "session@cbstorages" )
-			.to( "#moduleMapping#.model.SessionStorage" );
+			.to( "#moduleMapping#.models.SessionStorage" );
 
 	}
 

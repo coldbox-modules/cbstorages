@@ -9,7 +9,7 @@ Date        :	9/3/2007
 Description :
 	securityTest
 ----------------------------------------------------------------------->
-<cfcomponent extends="coldbox.system.testing.BaseTestCase" appMapping="/root" skip="railoOnly">
+<cfcomponent extends="coldbox.system.testing.BaseTestCase" appMapping="/root" skip="true">
 
 	<cffunction name="testRetrieval" access="public" returntype="void" output="false">
 		<!--- Now test some events --->
@@ -50,7 +50,7 @@ Description :
 	<!--- railoOnly --->
     <cffunction name="railoOnly" output="false" access="public" returntype="boolean" hint="">
     	<cfscript>
-    		return ( structKeyExists( server, "railo" ) ? false : true );
+    		return ( structKeyExists( server, "railo" )? false : true );
     	</cfscript>
     </cffunction>
 

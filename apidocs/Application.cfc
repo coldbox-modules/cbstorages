@@ -9,7 +9,7 @@ component{
 
 	rootPath = REReplaceNoCase( this.mappings[ "/colddoc" ], "apidocs(\\|\/)$", "" );
 	this.mappings[ "/root" ] = rootPath;
-	this.mappings[ "/cbstorages" ] = rootPath & "modules/cbstorages/model";
+	this.mappings[ "/cbstorages" ] = rootPath & "modules/cbstorages/models";
 
 	// request start
 	public boolean function onRequestStart(String targetPage){
