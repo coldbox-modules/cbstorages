@@ -12,7 +12,8 @@ component{
 	// any mappings go here, we create one that points to the root called test.
 	this.mappings[ "/tests" ] = getDirectoryFromPath( getCurrentTemplatePath() );
 	rootPath = REReplaceNoCase( this.mappings[ "/tests" ], "tests(\\|/)", "" );
-	this.mappings[ "/root" ]   = rootPath;
+	this.mappings[ "/root" ]   		= rootPath;
+	this.mappings[ "/cbstorages" ]  = rootPath & "/modules/cbstorages";
 
 	// any orm definitions go here.
 

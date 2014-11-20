@@ -14,7 +14,7 @@ Description :
 	<cffunction name="testRetrieval" access="public" returntype="void" output="false">
 		<!--- Now test some events --->
 		<cfscript>
-			var storage = getModel( "cookie@cbstorages" );
+			var storage = getModel( "cookieStorage@cbstorages" );
 			assertTrue( isObject( storage ) );
 		</cfscript>
 	</cffunction>
@@ -22,7 +22,7 @@ Description :
 	<cffunction name="testMethods" access="public" returntype="void" output="false">
 		<!--- Now test some events --->
 		<cfscript>
-			var storage = getModel( "cookie@cbstorages" );
+			var storage = getModel( "cookieStorage@cbstorages" );
 			var complex = structnew();
 
 			complex.date = now();
@@ -54,7 +54,7 @@ Description :
 	<cffunction name="testWithEncryption" access="public" returntype="void" output="false">
 		<!--- Now test some events --->
 		<cfscript>
-			var storage = getModel( "cookie@cbstorages" );
+			var storage = getModel( "cookieStorage@cbstorages" );
 			var complex = structnew();
 
 			complex.date = now();

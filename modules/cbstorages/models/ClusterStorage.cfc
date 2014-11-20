@@ -27,13 +27,13 @@ Blog Etnry (help/doc): http://www.railo.ch/blog/index.cfm/2008/7/6/Cluster-Scope
 <!------------------------------------------- CONSTRUCTOR ------------------------------------------->
 
 	<cffunction name="init" access="public" returntype="ClusterStorage" output="false">
-		<cfargument name="appName" type="string" required="true" hint="The application key name to use in the cluster scope"/>
+		<cfargument name="settings" type="struct" required="true" inject="coldbox:setting:storages"/>
 		<cfscript>
 
 			/* Lock Name */
 			instance.lockName = hash( now() ) & "_CLUSTER_STORAGE";
 			instance.lockTimeout = 20;
-			instance.clusterKey = safeName( arguments.appName ) & "_storage";
+			instance.clusterKey = safeName( arguments.settings.clusterStorage.appName ) & "_storage";
 
 			return this;
 		</cfscript>

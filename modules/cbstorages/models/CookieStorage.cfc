@@ -21,13 +21,13 @@ Modification History: March 23,2008 Added new feature to encrypt/decrypt cookie 
 <!------------------------------------------- CONSTRUCTOR ------------------------------------------->
 
 	<cffunction name="init" access="public" returntype="CookieStorage" output="false" hint="Constructor">
-		<cfargument name="settings" type="struct" required="true" hint="The storage settings from the module config"/>
+		<cfargument name="settings" type="struct" required="true" inject="coldbox:setting:storages"/>
 		<cfscript>
 			// set CFML engine encryption CF, BD, Railo
-			setEncryptionAlgorithm( arguments.settings.encryptionAlgorithm );
-			setEncryptionKey( arguments.settings.encryptionSeed );
-			setEncryption( arguments.settings.useEncryption );
-			setEncryptionEncoding( arguments.settings.encryptionEncoding );
+			setEncryptionAlgorithm( arguments.settings.cookieStorage.encryptionAlgorithm );
+			setEncryptionKey( arguments.settings.cookieStorage.encryptionSeed );
+			setEncryption( arguments.settings.cookieStorage.useEncryption );
+			setEncryptionEncoding( arguments.settings.cookieStorage.encryptionEncoding );
 
 			return this;
 		</cfscript>

@@ -14,7 +14,7 @@ Description :
 	<cffunction name="testRetrieval" access="public" returntype="void" output="false">
 		<!--- Now test some events --->
 		<cfscript>
-			var storage = getModel( "session@cbstorages" );
+			var storage = getModel( "sessionStorage@cbstorages" );
 			assertTrue( isObject( storage ) );
 		</cfscript>
 	</cffunction>
@@ -22,7 +22,7 @@ Description :
 	<cffunction name="testMethods" access="public" returntype="void" output="false">
 		<!--- Now test some events --->
 		<cfscript>
-			var storage = getModel( "session@cbstorages" );
+			var storage = getModel( "sessionStorage@cbstorages" );
 
 			storage.setVar("tester", 1);
 
