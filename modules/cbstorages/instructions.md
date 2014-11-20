@@ -12,6 +12,8 @@ The module registers the following storage mappings:
 * `clusterStorage@cbstorages`
 * `sessionStorage@cbstorages`
 
+You can check out the included API Docs to see all the functions you can use for persistence.
+
 ## Settings
 The **cluster** and **cookie** storages also have some configuration data that can be set in your application's configuration `ColdBox.cfc` under a `storages` structure:
 
