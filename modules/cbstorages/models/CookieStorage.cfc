@@ -9,8 +9,11 @@ Date     :	October 15, 2007
 Description :
 	This is a plugin that enables the setting/getting of permanent variables in	the cookie scope.
 	Usage:
-	set		controller.getPlugin("CookieStorage").setVar(name="name1",value="hello1",expires="11")
-	get		controller.getPlugin("CookieStorage").getVar(name="name1")
+	set		getInstance("CookieStorage@cbstorages").setVar(name="name1",value="hello1",expires="11")
+	get		getInstance("CookieStorage@cbstorages").getVar(name="name1")
+
+	DI example
+	property name="cookieStorage" 	inject="id:CookieStorage@cbstorages";
 Modification History: March 23,2008 Added new feature to encrypt/decrypt cookie value
 
 ----------------------------------------------------------------------->
