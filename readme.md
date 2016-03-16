@@ -6,15 +6,50 @@ Apache License, Version 2.0.
 
 ##IMPORTANT LINKS
 - https://github.com/ColdBox/cbox-cbstorages
-- http://www.coldbox.org/forgebox/view/cbstorages
+- http://forgebox.io/view/cbstorages
 
 ##SYSTEM REQUIREMENTS
-- Railo 4+
+- Lucee 4.5+
 - ColdFusion 9+
+- 
+#INSTRUCTIONS
+Just drop into your **modules** folder or use CommandBox to install
+
+`box install cbstorages`
+
+## WireBox Mappings
+The module registers the following storage mappings:
+
+* `applicationStorage@cbstorages`
+* `clientStorage@cbstorages`
+* `cookieStorage@cbstorages`
+* `clusterStorage@cbstorages`
+* `sessionStorage@cbstorages`
+
+You can check out the included API Docs to see all the functions you can use for persistence.
+
+## Settings
+The **cluster** and **cookie** storages also have some configuration data that can be set in your application's configuration `ColdBox.cfc` under a `storages` structure:
+
+```js
+storages = {
+    // If using the cluster storage, this is the cluster key app name to use
+    clusterStorage = {
+        clusterAppName = "MyApp"
+    },
+    // Cookie Storage settings
+    cookieStorage = {
+        useEncryption   = false,
+        encryptionSeed  = "CBStorages",
+        encryptionAlgorithm = "CFMX_COMPAT",
+        encryptionEncoding = "HEX"
+    }
+};
+```
 
 ********************************************************************************
 Copyright Since 2005 ColdBox Framework by Luis Majano and Ortus Solutions, Corp
-www.coldbox.org | www.luismajano.com | www.ortussolutions.com
+www.ortussolutions.com
 ********************************************************************************
 ####HONOR GOES TO GOD ABOVE ALL
 Because of His grace, this project exists. If you don't like this, then don't read it, its not for you.

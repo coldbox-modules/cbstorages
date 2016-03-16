@@ -1,0 +1,17 @@
+{
+    "name":"cbstorages Builder",
+    "version":"1.0.0",
+    "slug":"cbstorages-shell",
+    "private":false,
+    "defaultPort":0,
+    "dependencies":{
+        "coldbox":"4.1.0+00002"
+    },
+    "devDependencies":{
+        "testbox":"2.3.0+00044"
+    },
+    "installPaths":{
+        "coldbox":"coldbox",
+        "testbox":"testbox"
+    }
+}

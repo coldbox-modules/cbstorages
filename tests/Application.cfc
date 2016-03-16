@@ -1,6 +1,6 @@
 /**
 * Copyright Since 2005 Ortus Solutions, Corp
-* www.coldbox.org | www.luismajano.com | www.ortussolutions.com | www.gocontentbox.org
+* www.ortussolutions.com | www.gocontentbox.org
 **************************************************************************************
 */
 component{
@@ -8,6 +8,8 @@ component{
 	// any other application.cfc stuff goes below:
 	this.sessionManagement = true;
 	this.clientManagement  = true;
+	// Turn on/off white space managemetn
+	this.whiteSpaceManagement = "smart";
 
 	// any mappings go here, we create one that points to the root called test.
 	this.mappings[ "/tests" ] = getDirectoryFromPath( getCurrentTemplatePath() );
