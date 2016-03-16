@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ColdBox/cbox-storages.svg?branch=development)](https://travis-ci.org/ColdBox/cbox-storages)
+
 # WELCOME TO THE CBSTORAGES MODULE
 A collection of model objects to facade and help with native ColdFusion persistence structures.
 
