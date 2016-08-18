@@ -1,26 +1,28 @@
 {
 	"name" 		: "CBStorages",
-	"version"	: "@version.number@+@build.number@",
 	"author" 	: "Ortus Solutions.com <info@ortussolutions.com",
+	"version"	: "1.1.0",
+	"location"	: "http://downloads.ortussolutions.com/ortussolutions/coldbox-modules/cbstorages/1.1.0/cbstorages-1.1.0.zip",
 	"slug"		: "cbstorages",
 	"type"		: "modules",
-	"homepage"	: "https://github.com/ColdBox/cbox-storages",
-	"documentation"		: "https://github.com/ColdBox/cbox-storages",
-	"repository"		: { "type" : "git", "url" : "https://github.com/ColdBox/cbox-storages" },
-	"shortDescription"	: "A collection of model objects to facade and help with native ColdFusion extensions",
+	"homepage"	: "https://github.com/coldbox-modules/cbox-storages",
+	"documentation"		: "https://github.com/coldbox-modules/cbox-storages",
+	"bugs"		: "https://github.com/coldbox-modules/cbox-storages/issues",
+	"repository"		: { "type" : "git", "url" : "https://github.com/coldbox-modules/cbox-storages" },
+	"shortDescription"	: "Provides a collection of facade storages for ColdFusion and distributed caching",
 	"license"			: [ 
 		{ "type" : "Apache2", "url" : "http://www.apache.org/licenses/LICENSE-2.0.html" } 
 	],
 	"contributors"		: [
 		"Brad Wood <bdw429s@gmail.com>", "Curt Gratz <gratz@computerknowhow.com>"
 	],
-	"engines"	: [
-		{ "type" : "lucee", "version" : ">4.5" },
-		{ "type" : "adobe", "version" : ">9.02" }
-	],
 	"ignore":[
         "**/.*",
-        "tests",
-        "*/.md"
-    ]
+        "tests/*",
+		".git*"
+    ],
+    "scripts":{
+    	"postVersion" : "package set location='http://downloads.ortussolutions.com/ortussolutions/coldbox-modules/cbstorages/`package version`/cbstorages-`package version`.zip'",
+		"postPublish" : "!git push --follow-tags"
+	}
 }
