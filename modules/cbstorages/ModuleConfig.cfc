@@ -3,8 +3,8 @@ component {
 	// Module Properties
 	this.title 				= "ColdBox Storages";
 	this.author 			= "Ortus Solutions";
-	this.webURL 			= "http://www.ortussolutions.com";
-	this.description 		= "Provides a collection of facade storages for ColdFusion";
+	this.webURL 			= "https://www.ortussolutions.com";
+	this.description 		= "Provides a collection of facade storages for ColdFusion and distributed caching";
 	this.version			= "@version.number@+@build.number@";
 	// If true, looks for views in the parent first, if not found, then in the module. Else vice-versa
 	this.viewParentLookup 	= true;
@@ -15,6 +15,9 @@ component {
 	// Module Entry Point
 	this.cfmapping			= "cbstorages";
 
+	/**
+	* Configure
+	*/
 	function configure(){
 		var settings = controller.getConfigSettings();
 		// parse parent settings
@@ -45,10 +48,17 @@ component {
 
 		//defaults
 		configStruct.storages = {
-			// If using the cluster storage, this is the cluster key app name to use
+			// Cache Storage Settings
+		    cacheStorage = {
+		        cachename   = "default",
+		        timeout     = 60 // The default timeout of the session bucket, defaults to 60
+		    },
+
+    		// If using the cluster storage, this is the cluster key app name to use
 			clusterStorage = {
 				clusterAppName = "MyApp"
 			},
+			
 			// Cookie Storage settings
 			cookieStorage = {
 				useEncryption 	= false,
