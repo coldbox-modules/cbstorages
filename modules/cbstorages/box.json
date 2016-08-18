@@ -22,7 +22,7 @@
 		".git*"
     ],
     "scripts":{
-    	"postVersion" : "package set location='http://downloads.ortussolutions.com/ortussolutions/coldbox-modules/cbstorages/`package version`/cbstorages-`package version`.zip'",
+    	"postVersion" : "package set location='http://downloads.ortussolutions.com/ortussolutions/coldbox-modules/cbstorages/`package version`/cbstorages-`package version`.zip'",
 		"postPublish" : "!git push --follow-tags"
 	}
 }
