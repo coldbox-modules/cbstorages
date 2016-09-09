@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+## 1.3.0
+* Updated API docs with a syntax typo
+
 ## 1.2.0 
 * Update build process
 * Updated dependencies
