@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ColdBox/cbox-storages.svg?branch=development)](https://travis-ci.org/ColdBox/cbox-storages)
+[![Build Status](https://travis-ci.org/coldbox-modules/cbox-storages.svg?branch=development)](https://travis-ci.org/coldbox-modules/cbox-storages)
 
 # WELCOME TO THE CBSTORAGES MODULE
 A collection of model objects to facade and help with native ColdFusion persistence structures and also any Cache using CacheBox.  This can allow you to leverage distributed caches like Couchbase, Redis, ehCache, etc for distributed session management.
@@ -9,7 +9,7 @@ Apache License, Version 2.0.
 ##IMPORTANT LINKS
 - Source: https://github.com/coldbox-modules/cbox-storages
 - Issues: https://github.com/coldbox-modules/cbox-storages#issues
-- ForgeBox: http://forgebox.io/view/cbstorages
+- ForgeBox: https://forgebox.io/view/cbstorages
 - [Changelog](changelog.md)
 
 ##SYSTEM REQUIREMENTS
@@ -30,6 +30,7 @@ The module registers the following storage mappings:
 * `clusterStorage@cbstorages` - For cluster based storage (Lucee only)
 * `sessionStorage@cbstorages` - For session based storage
 * `cacheStorage@cbstorages` - For CacheBox based storage simulating session/client
+* `requestStorage@cbstorages` - For request based storage
 
 You can check out the included API Docs to see all the functions you can use for persistence.
 

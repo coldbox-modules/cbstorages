@@ -3,6 +3,8 @@ CHANGELOG
 
 ## 1.3.0
 * Updated API docs with a syntax typo
+* New `RequestStorage` thanks to Dan Murphy
+* Updated travis process for self-publishing
 
 ## 1.2.0 
 * Update build process

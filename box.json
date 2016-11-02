@@ -5,7 +5,7 @@
     "private":false,
     "defaultPort":0,
     "dependencies":{
-        "coldbox":"^4.2.0+00002"
+        "coldbox":"^4.3.0"
     },
     "devDependencies":{
         "testbox":"^2.3.0+00044"
