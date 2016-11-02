@@ -9,7 +9,7 @@ component{
 	rootPath = REReplaceNoCase( API_ROOT, "apidocs(\\|\/)$", "" );
 
 	// MODULE NAME
-	request.moduleName = "cbStorages";
+	request.moduleName = "cbstorages";
 
 	this.mappings[ "/docbox" ] 	= API_ROOT & "docbox";
 	this.mappings[ "/root" ] 	= rootPath;
