@@ -48,7 +48,7 @@ component {
 		configStruct.storages = {
 			// Cache Storage Settings
 		    cacheStorage = {
-		        cachename   = "default",
+		        cachename   = "template",
 		        timeout     = 60 // The default timeout of the session bucket, defaults to 60
 		    },
 
