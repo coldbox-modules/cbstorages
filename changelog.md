@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+## 1.4.0
+* Updated to leverage workbench module template
+* Remove useless entry points thanks to @tropicalista
+* Make default cache for `CacheStorage` to be the `template` cache instead of `default`
+
 ## 1.3.0
 * Updated API docs with a syntax typo
 * New `RequestStorage` thanks to Dan Murphy

@@ -1,17 +1,25 @@
 {
     "name":"cbstorages Builder",
-    "version":"1.0.0",
+    "version":"1.4.0",
     "slug":"cbstorages-shell",
     "private":false,
     "defaultPort":0,
     "dependencies":{
-        "coldbox":"^4.3.0"
+        "coldbox":"^4.3.0",
+        "workbench":"git+https://github.com/Ortus-Solutions/unified-workbench.git"
     },
     "devDependencies":{
-        "testbox":"^2.3.0+00044"
+        "testbox":"2.3.0+00044"
     },
     "installPaths":{
+        "testbox":"testbox",
         "coldbox":"coldbox",
-        "testbox":"testbox"
+        "workbench":"workbench"
+    },
+    "testbox":{
+        "runner":"http://localhost:49616"
+    },
+    "scripts":{
+        "postVersion":"recipe workbench/bump.boxr"
     }
 }
