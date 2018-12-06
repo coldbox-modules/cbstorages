@@ -2,7 +2,23 @@
 
 # WELCOME TO THE CBSTORAGES MODULE
 
-A collection of model objects to facade and help with native ColdFusion persistence structures and also any Cache using CacheBox.  This can allow you to leverage distributed caches like Couchbase, Redis, ehCache, etc for distributed session management.
+The `cbstorages` module will provide you with a collection of **smart** :wink: storage services that will enhance the capabilities of the major ColdFusion (CFML) scopes: 
+
+- Application
+- Cache
+- Client
+- Cluster (Lucee Only)
+- Cookie
+- Request
+- Session
+
+## Enhancement Capabilities
+
+- Consistent API for dealing with all scopes
+- The `CacheStorage` allows you to leverage distributed caches like Couchbase, Redis, ehCache, etc for distributed session management. It can act as a distributed session scope.
+- The `CookieStorage` can do automatic encryption/decryption
+- Ability to retrieve and clear all values stored in a scope
+- Much More
 
 ## LICENSE
 
@@ -38,7 +54,7 @@ The module registers the following storage mappings:
 * `cacheStorage@cbstorages` - For CacheBox based storage simulating session/client
 * `requestStorage@cbstorages` - For request based storage
 
-You can check out the included API Docs to see all the functions you can use for persistence.
+You can check out the included [API Docs](https://apidocs.ortussolutions.com/#/coldbox-modules/cbstorages/) to see all the functions you can use for persistence.
 
 ## Settings
 
@@ -48,7 +64,7 @@ Some storages require further configuration via your configuration file `config/
 storages = {
     // Cache Storage Settings
     cacheStorage = {
-        cachename   = "The CacheBox cache to use",
+        cachename   = "The CacheBox cache provider to use",
         timeout     = 60 // The default timeout of the session bucket, defaults to 60
     },
 

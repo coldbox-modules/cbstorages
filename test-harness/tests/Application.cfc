@@ -9,13 +9,14 @@ component{
 	// APPLICATION CFC PROPERTIES
 	this.name 				= "ColdBoxTestingSuite" & hash(getCurrentTemplatePath());
 	this.sessionManagement 	= true;
+	this.clientManagement 	= true;
 	this.sessionTimeout 	= createTimeSpan( 0, 0, 15, 0 );
 	this.applicationTimeout = createTimeSpan( 0, 0, 15, 0 );
 	this.setClientCookies 	= true;
 
 	// Create testing mapping
 	this.mappings[ "/tests" ] = getDirectoryFromPath( getCurrentTemplatePath() );
-	
+
 	// The application root
 	rootPath = REReplaceNoCase( this.mappings[ "/tests" ], "tests(\\|/)", "" );
 	this.mappings[ "/root" ]   = rootPath;
