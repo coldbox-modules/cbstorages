@@ -144,7 +144,7 @@ component accessors="true" threadsafe singleton{
 	/**
 	* Builds the unique Session Key of a user request
 	*/
-	private string function getSessionKey(){
+	public string function getSessionKey(){
 		var prefix = "cbstorage:#variables.appName#:";
 
 		// Check jsession id First
