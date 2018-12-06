@@ -1,42 +1,40 @@
 {
-	"name" 		: "CBStorages",
-	"version"	: "1.5.0",
-	"location":"https://downloads.ortussolutions.com/ortussolutions/coldbox-modules/cbstorages/@build.version@/cbstorages-@build.version@.zip",
-	"author" 	: "Ortus Solutions.com <info@ortussolutions.com>",
-	"slug"		: "cbstorages",
-	"type"		: "modules",
-	"keywords"	: "storages, session, cache, client, distributed cache",
-	"homepage"	: "https://github.com/coldbox-modules/cbstorages",
-	"documentation"		: "https://github.com/coldbox-modules/cbstorages",
-	"bugs"		: "https://github.com/coldbox-modules/cbstorages/issues",
-	"repository":{
+    "name":"CBStorages",
+    "version":"1.6.0",
+    "location":"https://downloads.ortussolutions.com/ortussolutions/coldbox-modules/cbstorages/@build.version@/cbstorages-@build.version@.zip",
+    "author":"Ortus Solutions.com <info@ortussolutions.com>",
+    "slug":"cbstorages",
+    "type":"modules",
+    "keywords":"storages, session, cache, client, distributed cache",
+    "homepage":"https://github.com/coldbox-modules/cbstorages",
+    "documentation":"https://github.com/coldbox-modules/cbstorages",
+    "bugs":"https://github.com/coldbox-modules/cbstorages/issues",
+    "repository":{
         "type":"git",
         "url":"https://github.com/ortus-solutions/cbstorages"
     },
-	"shortDescription"	: "Provides a collection of facade storages for ColdFusion and distributed caching",
-	"license":[
+    "shortDescription":"Provides a collection of facade storages for ColdFusion and distributed caching",
+    "license":[
         {
             "type":"Apache2",
             "url":"http://www.apache.org/licenses/LICENSE-2.0"
         }
     ],
-	"contributors"		: [
-		"Brad Wood <bdw429s@gmail.com>",
-		"Curt Gratz <gratz@computerknowhow.com>",
-		"Jon Clausen <jclausen@ortussolutions.com>",
-		"Dan Murphy"
-	],
-	"dependencies":{},
-    "devDependencies":{
-    },
-    "installPaths":{
-    },
+    "contributors":[
+        "Brad Wood <bdw429s@gmail.com>",
+        "Curt Gratz <gratz@computerknowhow.com>",
+        "Jon Clausen <jclausen@ortussolutions.com>",
+        "Dan Murphy"
+    ],
+    "dependencies":{},
+    "devDependencies":{},
+    "installPaths":{},
     "ignore":[
         "**/.*",
         "test-harness",
         "*/.md"
     ],
     "scripts":{
-		"toMaster":"recipe build/toMaster.boxr"
+        "toMaster":"recipe build/toMaster.boxr"
     }
 }
