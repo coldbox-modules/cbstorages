@@ -6,6 +6,7 @@
 * `improvement` : Dropped Lucee4.5 and ACF11 support
 * `improvement` : Script migrations
 * `improvement` : Added option to specify path when deleting a cookie. Without this option, the cookie is never deleted when specifying a path when creating a cookie. https://github.com/coldbox-modules/cbstorages/pull/7 (@donbellamy)
+* `improvement` : TestBox 3 upgrade
 
 ## 1.5.0
 
