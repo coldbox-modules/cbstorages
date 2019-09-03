@@ -1,105 +1,130 @@
-﻿<!-----------------------------------------------------------------------
-********************************************************************************
-Copyright Since 2005 ColdBox Framework by Luis Majano and Ortus Solutions, Corp
-www.ortussolutions.com
-********************************************************************************
+﻿/**
+* Copyright Ortus Solutions, Corp
+* www.ortussolutions.com
+* ---
+* This storage leverages the client scope and will serialize complex objects into JSON if needed.
+*/
+component
+	accessors="true"
+	serializable="false"
+	extends="AbstractStorage"
+	implements="IStorage"
+	threadsafe
+	singleton
+{
 
-Author 	 :	Luis Majano
-Date     :	September 23, 2005
-Description :
-	This is a plugin that enables the setting/getting of permanent variables in
-	the client scope using the wddx features if needed.
+	/**
+	 * Constructor
+	 */
+	function init(){
+		return this;
+	}
 
-A ColdBox Storage Plugin implements the following methods:
+	/**
+	 * Set a new variable in storage
+	 *
+	 * @name The name of the data key
+	 * @value The value of the data to store
+	 *
+	 * @return cbstorages.models.IStorage
+	 */
+	any function set( required name, required value ){
+		if( isSimpleValue( arguments.value ) ){
+			client[ arguments.name ] = arguments.value;
+		} else {
+			client[ arguments.name ] = serializeJSON( arguments.value );
+		}
 
-getVar(name,default):any
-setVar(name,value):void
-deleteVar(name):boolean
-exists(name):boolean
-clearAll():void
-getStorage():struct
-clearStorage():void
+		return this;
+	}
 
------------------------------------------------------------------------>
-<cfcomponent hint="Client Storage plugin. It provides the user with a mechanism for permanent data storage using the client scope and WDDX."
-			 output="false"
-			 singleton>
+	/**
+	 * Get a new variable in storage if it exists, else return default value, else will return null.
+	 *
+	 * @name The name of the data key
+	 * @defaultValue The default value to return if not found in storage
+	 */
+	any function get( required name, defaultValue ){
 
-<!------------------------------------------- CONSTRUCTOR ------------------------------------------->
+		// Verify
+		if( structKeyExists( client, arguments.name ) ){
+			if( !isJson( client[ arguments.name ] ) ){
+				return client[ arguments.name ];
+			}
 
-	<cffunction name="init" access="public" returntype="ClientStorage" output="false" hint="Constructor.">
-		<cfscript>
-			/* Return Instance */
-			return this;
-		</cfscript>
-	</cffunction>
+			return deserializeJSON( client[ arguments.name ] );
+		}
 
-<!------------------------------------------- PUBLIC ------------------------------------------->
+		// default value
+		if( !isNull( arguments.defaultValue ) ){
+			return arguments.defaultValue;
+		}
 
-	<!--- Set a variable --->
-	<cffunction name="setVar" access="public" returntype="void" hint="Set a new permanent variable." output="false">
-		<!--- ************************************************************* --->
-		<cfargument name="name"  type="string" required="true" hint="The name of the variable.">
-		<cfargument name="value" type="any"    required="true" hint="The value to set in the variable.">
-		<!--- ************************************************************* --->
-		<cfset var tmpVar = "">
-		<!--- Test for simple mode --->
-		<cfif isSimpleValue(arguments.value)>
-			<cfset client[arguments.name] = arguments.value>
-		<cfelse>
-			<!--- Wddx variable --->
-			<cfwddx action="cfml2wddx" input="#arguments.value#" output="tmpVar">
-			<!--- Set Variable --->
-			<cfset client[arguments.name] = tmpVar>
-		</cfif>
-	</cffunction>
+		// if we get here, we return null
+	}
 
-	<!--- Get a variable --->
-	<cffunction name="getVar" access="public" returntype="any" hint="Get a new permanent variable. If the variable does not exist. The method returns blank." output="false">
-		<!--- ************************************************************* --->
-		<cfargument  name="name" 		type="string"  required="true" 		hint="The variable name to retrieve.">
-		<cfargument  name="default"  	type="any"     required="false"  	hint="The default value to set. If not used, a blank is returned." default="">
-		<!--- ************************************************************* --->
-		<cfset var wddxVar = "">
-		<cfset var rtnVar = "">
+	/**
+	 * Delete a variable in the storage
+	 *
+	 * @name The name of the data key
+	 */
+	boolean function delete( required name ){
+		return structDelete( client, arguments.name, true );
+	}
 
-		<cfif exists(arguments.name)>
-			<cfset rtnVar = client[arguments.name]>
-			<cfif isWDDX(rtnVar)>
-				<!--- Unwddx packet --->
-				<cfwddx action="wddx2cfml" input="#rtnVar#" output="wddxVar">
-				<cfset rtnVar = wddxVar>
-			</cfif>
-			<cfreturn rtnVar>
-		<cfelse>
-			<cfreturn arguments.default>
-		</cfif>
-	</cffunction>
+	/**
+	 * Verifies if the named storage key exists
+	 *
+	 * @name The name of the data key
+	 */
+	boolean function exists( required name ){
+		// check if exists
+		return structKeyExists( client, arguments.name );
+	}
 
-	<!--- Exists Check --->
-	<cffunction name="exists" access="public" returntype="boolean" hint="Checks wether the permanent variable exists." output="false">
-		<!--- ************************************************************* --->
-		<cfargument  name="name" type="string" required="true" 	hint="The variable name to retrieve.">
-		<!--- ************************************************************* --->
-		<cfreturn structKeyExists(client,arguments.name)>
-	</cffunction>
+	/**
+	 * Clear the entire storage
+	 *
+	 * @return cbstorages.models.IStorage
+	 */
+	any function clearAll(){
+		structClear( client );
+		return this;
+	}
 
-	<!--- Delete a Var --->
-	<cffunction name="deleteVar" access="public" returntype="boolean" hint="Tries to delete a permanent client var." output="false">
-		<!--- ************************************************************* --->
-		<cfargument  name="name" type="string" required="true" 	hint="The variable name to retrieve.">
-		<!--- ************************************************************* --->
-		<cfreturn structdelete(client, arguments.name, true)>
-	</cffunction>
+	/****************************************** STORAGE METHODS ******************************************/
 
-	<!--- Clear All From Storage --->
-	<cffunction name="clearAll" access="public" returntype="void" hint="Clear the entire coldbox client storage" output="false">
-		<cfset structClear(client)>
-	</cffunction>
+	/**
+	 * Get the entire storage scope structure
+	 */
+	struct function getStorage(){
+		return client;
+	}
 
-	<!--- Get Storage --->
-	<cffunction name="getStorage" access="public" returntype="struct" hint="Get the entire storage scope structure" output="false" >
-		<cfreturn client>
-	</cffunction>
+	/**
+	 * Remove the storage completely, different from clear, this detaches the entire storage
+	 *
+	 * @return cbstorages.models.IStorage
+	 */
+	any function removeStorage(){
+		return clearAll();
+	}
 
-</cfcomponent>
+	/**
+	 * Check if storage exists
+	 */
+	boolean function storageExists(){
+		return isDefined( "client" );
+	}
+
+	/**
+	 * Create the storage
+	 *
+	 * @return cbstorages.models.IStorage
+	 */
+	any function createStorage(){
+		return this;
+	}
+
+
+}

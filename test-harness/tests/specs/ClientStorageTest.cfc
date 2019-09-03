@@ -21,10 +21,10 @@ securityTest
 		<!--- Now test some events --->
 		<cfscript>
 		var storage = getModel( "clientStorage@cbstorages" );
-		var complex = structNew();
-
-		complex.date = now();
-		complex.id = createUUID();
+		var complex = {
+			"date" : now(),
+			"id" : createUUId()
+		};
 
 		storage.set( "tester", 1 );
 
@@ -38,9 +38,31 @@ securityTest
 
 		storage.set( "tester", complex );
 		AssertTrue( storage.exists( "tester" ), "Test Complex set & Exists" );
+		expect( storage.get( "tester" ) ).toHaveKey( "date" );
 
 		storage.delete( "tester" );
 		AssertFalse( storage.exists( "tester" ), "Remove & Exists" );
+
+		storage.clearAll();
+
+		// set/get multi with Keys
+		storage.setMulti( { test : now(), test2 : "luis" } );
+		expect( storage.getMulti( "test,test2" ) ).toHaveLength( 2 );
+		// Get Keys
+		expect( storage.getKeys() )
+			.toBeArray()
+			.toHaveLength( 2 )
+			.toInclude( "test" )
+			.toInclude( "test2" );
+
+		// deleteMulti
+		var r = storage.deleteMulti( "test,test2,test3" );
+		expect( r.test ).toBeTrue();
+		expect( r.test2 ).toBeTrue();
+		expect( r.test3 ).toBeFalse();
+
+		expect( storage.getSize() ).toBe( 0 );
+		expect( storage.isEmpty() ).toBeTrue();
 		</cfscript>
 	</cffunction>
 </cfcomponent>
