@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.0.0
+
+* `feature` : ColdBox 4/5 approach to settings instead of in the root, in the `moduleSettings`
+* `improvement` : Dropped Lucee4.5 and ACF11 support
+* `improvement` : Script migrations 
+
 ## 1.5.0
 
 * Update new template approach
@@ -18,7 +24,7 @@
 * New `RequestStorage` thanks to Dan Murphy
 * Updated travis process for self-publishing
 
-## 1.2.0 
+## 1.2.0
 
 * Update build process
 * Updated dependencies
@@ -33,3 +39,4 @@
 ## 1.0.0
 
 * Create first module version
+
