@@ -4,7 +4,8 @@
 
 * `feature` : ColdBox 4/5 approach to settings instead of in the root, in the `moduleSettings`
 * `improvement` : Dropped Lucee4.5 and ACF11 support
-* `improvement` : Script migrations 
+* `improvement` : Script migrations
+* `improvement` : Added option to specify path when deleting a cookie. Without this option, the cookie is never deleted when specifying a path when creating a cookie. https://github.com/coldbox-modules/cbstorages/pull/7 (@donbellamy)
 
 ## 1.5.0
 
