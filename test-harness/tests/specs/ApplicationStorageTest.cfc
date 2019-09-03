@@ -9,6 +9,7 @@ Description :
 securityTest
 ----------------------------------------------------------------------->
 <cfcomponent extends="coldbox.system.testing.BaseTestCase" appMapping="/root">
+
 	<cffunction name="testRetrieval" access="public" returntype="void" output="false">
 		<!--- Now test some events --->
 		<cfscript>
@@ -23,18 +24,18 @@ securityTest
 		<cfscript>
 		var storage = getModel( "applicationStorage@cbstorages" );
 
-		storage.setVar( "tester", 1 );
+		storage.set( "tester", 1 );
 
 		AssertTrue( storage.exists( "tester" ), "Test set & Exists" );
-		AssertEquals( 1, storage.getVar( "tester" ), "Get & Set Test" );
+		AssertEquals( 1, storage.get( "tester" ), "Get & Set Test" );
 
 		AssertFalse( storage.exists( "nothing" ), "False Assertion on exists" );
 
-		storage.deleteVar( "tester" );
+		storage.delete( "tester" );
 		AssertFalse( storage.exists( "tester" ), "Remove & Exists" );
 
-		storage.setVar( "tester", 1 );
-		storage.setVar( "tester2", now() );
+		storage.set( "tester", 1 );
+		storage.set( "tester2", now() );
 
 		storage.clearAll();
 		AssertTrue( structIsEmpty( application.cbStorage ), "Clear & Test" );

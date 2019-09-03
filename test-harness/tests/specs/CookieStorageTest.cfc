@@ -26,25 +26,25 @@ securityTest
 		complex.date = now();
 		complex.id = createUUID();
 
-		storage.setVar( "tester", 1 );
+		storage.set( "tester", 1 );
 
 		AssertTrue( storage.exists( "tester" ), "Test set & Exists" );
-		AssertEquals( 1, storage.getVar( "tester" ), "Get & Set Test" );
+		AssertEquals( 1, storage.get( "tester" ), "Get & Set Test" );
 
 		AssertFalse( storage.exists( "nothing" ), "False Assertion on exists" );
-		storage.deleteVar( "tester" );
+		storage.delete( "tester" );
 		debug( cookie );
 
-		AssertFalse( storage.getVar( "tester" ).length(), "Remove & Exists for tester simple" );
-		storage.setVar( "tester", complex );
+		AssertFalse( storage.get( "tester" ).length(), "Remove & Exists for tester simple" );
+		storage.set( "tester", complex );
 		AssertTrue( storage.exists( "tester" ), "Test Complex set & Exists" );
 		debug( cookie );
-		r = storage.getVar( "tester" );
+		r = storage.get( "tester" );
 		assertTrue( isStruct( r ) );
 		assertEquals( complex.id, r.id );
 
-		storage.deleteVar( "tester" );
-		AssertFalse( storage.getVar( "tester" ).length(), "Remove & Exists for complex" );
+		storage.delete( "tester" );
+		AssertFalse( storage.get( "tester" ).length(), "Remove & Exists for complex" );
 		</cfscript>
 	</cffunction>
 
@@ -62,19 +62,19 @@ securityTest
 		storage.setEncryptionKey( "My#createUUID()#-Unit Test Key" );
 
 		/* Set */
-		storage.setVar( "tester", 1 );
+		storage.set( "tester", 1 );
 		AssertTrue( storage.exists( "tester" ), "Test set & Exists" );
-		AssertEquals( 1, storage.getVar( "tester" ), "Get & Set Test" );
+		AssertEquals( 1, storage.get( "tester" ), "Get & Set Test" );
 
 		AssertFalse( storage.exists( "nothing" ), "False Assertion on exists" );
-		storage.deleteVar( "tester" );
-		AssertFalse( storage.getVar( "tester" ).length(), "Remove & Exists for tester simple" );
+		storage.delete( "tester" );
+		AssertFalse( storage.get( "tester" ).length(), "Remove & Exists for tester simple" );
 
-		storage.setVar( "tester", complex );
+		storage.set( "tester", complex );
 		AssertTrue( storage.exists( "tester" ), "Test Complex set & Exists" );
 
-		storage.deleteVar( "tester" );
-		AssertFalse( storage.getVar( "tester" ).length(), "Remove & Exists for complex" );
+		storage.delete( "tester" );
+		AssertFalse( storage.get( "tester" ).length(), "Remove & Exists for complex" );
 		</cfscript>
 	</cffunction>
 </cfcomponent>

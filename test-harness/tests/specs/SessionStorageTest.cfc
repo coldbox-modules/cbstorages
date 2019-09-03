@@ -22,18 +22,18 @@ securityTest
 		<cfscript>
 		var storage = getModel( "sessionStorage@cbstorages" );
 
-		storage.setVar( "tester", 1 );
+		storage.set( "tester", 1 );
 
 		AssertTrue( storage.exists( "tester" ), "Test set & Exists" );
-		AssertEquals( 1, storage.getVar( "tester" ), "Get & Set Test" );
+		AssertEquals( 1, storage.get( "tester" ), "Get & Set Test" );
 
 		AssertFalse( storage.exists( "nothing" ), "False Assertion on exists" );
 
-		storage.deleteVar( "tester" );
+		storage.delete( "tester" );
 		AssertFalse( storage.exists( "tester" ), "Remove & Exists" );
 
-		storage.setVar( "tester", 1 );
-		storage.setVar( "tester2", now() );
+		storage.set( "tester", 1 );
+		storage.set( "tester2", now() );
 
 		storage.clearAll();
 		AssertTrue( structIsEmpty( session.cbStorage ), "Clear & Test" );
@@ -41,7 +41,7 @@ securityTest
 		// Remove it
 		structDelete( session, "cbStorage" );
 		// Try to add to it
-		storage.setVar( "tester", 123 );
+		storage.set( "tester", 123 );
 		AssertTrue( storage.exists( "tester" ), "Removal Reconstruction test." );
 		</cfscript>
 	</cffunction>

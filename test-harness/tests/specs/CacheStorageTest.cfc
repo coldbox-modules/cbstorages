@@ -26,25 +26,25 @@ securityTest
 		complex.date = now();
 		complex.id = createUUID();
 
-		storage.setVar( "tester", 1 );
+		storage.set( "tester", 1 );
 
 		AssertTrue( storage.exists( "tester" ), "Test set & Exists" );
-		AssertEquals( 1, storage.getVar( "tester" ), "Get & Set Test" );
+		AssertEquals( 1, storage.get( "tester" ), "Get & Set Test" );
 
 		AssertFalse( storage.exists( "nothing" ), "False Assertion on exists" );
-		storage.deleteVar( "tester" );
+		storage.delete( "tester" );
 
-		expect( storage.getVar( "tester" ) ).toBeNull();
+		expect( storage.get( "tester" ) ).toBeNull();
 
-		storage.setVar( "tester", complex );
+		storage.set( "tester", complex );
 		AssertTrue( storage.exists( "tester" ), "Test Complex set & Exists" );
 
-		var r = storage.getVar( "tester" );
+		var r = storage.get( "tester" );
 		assertTrue( isStruct( r ) );
 		assertEquals( complex.id, r.id );
 
-		storage.deleteVar( "tester" );
-		expect( storage.getVar( "tester" ) ).toBeNull();
+		storage.delete( "tester" );
+		expect( storage.get( "tester" ) ).toBeNull();
 		</cfscript>
 	</cffunction>
 </cfcomponent>
