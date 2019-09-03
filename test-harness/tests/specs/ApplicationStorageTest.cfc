@@ -40,6 +40,8 @@ securityTest
 		storage.clearAll();
 		AssertTrue( structIsEmpty( application.cbStorage ), "Clear & Test" );
 
+		storage.clearAll();
+
 		// set/get multi with Keys
 		storage.setMulti( { test : now(), test2 : "luis" } );
 		expect( storage.getMulti( "test,test2" ) ).toHaveLength( 2 );

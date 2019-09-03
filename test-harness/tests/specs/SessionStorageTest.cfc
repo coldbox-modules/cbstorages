@@ -43,6 +43,27 @@ securityTest
 		// Try to add to it
 		storage.set( "tester", 123 );
 		AssertTrue( storage.exists( "tester" ), "Removal Reconstruction test." );
+
+		storage.clearAll();
+
+		// set/get multi with Keys
+		storage.setMulti( { test : now(), test2 : "luis" } );
+		expect( storage.getMulti( "test,test2" ) ).toHaveLength( 2 );
+		// Get Keys
+		expect( storage.getKeys() )
+			.toBeArray()
+			.toHaveLength( 2 )
+			.toInclude( "test" )
+			.toInclude( "test2" );
+
+		// deleteMulti
+		var r = storage.deleteMulti( "test,test2,test3" );
+		expect( r.test ).toBeTrue();
+		expect( r.test2 ).toBeTrue();
+		expect( r.test3 ).toBeFalse();
+
+		expect( storage.getSize() ).toBe( 0 );
+		expect( storage.isEmpty() ).toBeTrue();
 		</cfscript>
 	</cffunction>
 
