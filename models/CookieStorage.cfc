@@ -120,13 +120,19 @@ Modification History: March 23,2008 Added new feature to encrypt/decrypt cookie 
 	<cffunction name="deleteVar" access="public" returntype="boolean" hint="Tries to delete a permanent cookie variable" output="false">
 		<cfargument  name="name" 	type="string" required="true" 	hint="The variable name to retrieve.">
 		<cfargument name="domain"	type="string" required="false"	default=""	hint="Domain in which cookie is valid and to which cookie content can be sent from the user's system.">
+		<cfargument name="path"		type="string" required="false" default="" hint="URL, within a domain, to which the cookie applies; typically a directory. Only pages in this path can use the cookie. By default, all pages on the server that set the cookie can access the cookie.">
 		<!--- ************************************************************* --->
 		<cfset var args		= StructNew() />
 		<cfif exists(arguments.name)>
 			<cfset args["name"] 	= ucase(arguments.name) />
 			<cfset args["expires"]	= "NOW" />
 			<cfset args["value"]	= "" />
-			<cfif len(arguments.domain)>
+			<cfif len( arguments.path ) and not len( arguments.domain ) >
+				<cfthrow type="CookieStorage.MissingDomainArgument" message="If you specify path, you must also specify domain.">
+			<cfelseif len( arguments.path ) and len( arguments.domain ) >
+				<cfset args["path"]		= arguments.path />
+				<cfset args["domain"]	= arguments.domain />
+			<cfelseif len( arguments.domain )>
 				<cfset args["domain"]	= arguments.domain />
 			</cfif>
 			<cfcookie attributeCollection="#args#">
