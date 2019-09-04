@@ -1,71 +1,109 @@
-﻿<!-----------------------------------------------------------------------
-********************************************************************************
-Copyright 2005-2007 ColdBox Framework by Luis Majano and Ortus Solutions, Corp
-www.ortussolutions.com
-********************************************************************************
-Author     :	Luis Majano
-Date        :	9/3/2007
-Description :
-securityTest
------------------------------------------------------------------------>
-<cfcomponent extends="coldbox.system.testing.BaseTestCase" appMapping="/root">
-	<cffunction name="testRetrieval" access="public" returntype="void" output="false">
-		<!--- Now test some events --->
-		<cfscript>
-		var storage = getModel( "cachestorage@cbstorages" );
-		assertTrue( isObject( storage ) );
-		</cfscript>
-	</cffunction>
+﻿
+/*******************************************************************************
+*	Integration Test as BDD (CF10+ or Railo 4.1 Plus)
+*
+*	Extends the integration class: coldbox.system.testing.BaseTestCase
+*
+*	so you can test your ColdBox application headlessly. The 'appMapping' points by default to
+*	the '/root' mapping created in the test folder Application.cfc.  Please note that this
+*	Application.cfc must mimic the real one in your root, including ORM settings if needed.
+*
+*	The 'execute()' method is used to execute a ColdBox event, with the following arguments
+*	* event : the name of the event
+*	* private : if the event is private or not
+*	* prePostExempt : if the event needs to be exempt of pre post interceptors
+*	* eventArguments : The struct of args to pass to the event
+*	* renderResults : Render back the results of the event
+*******************************************************************************/
+component extends="coldbox.system.testing.BaseTestCase" appMapping="/root"{
 
-	<cffunction name="testMethods" access="public" returntype="void" output="false">
-		<!--- Now test some events --->
-		<cfscript>
-		var storage = getModel( "cacheStorage@cbstorages" );
-		var complex = structNew();
+	/*********************************** LIFE CYCLE Methods ***********************************/
 
-		complex.date = now();
-		complex.id = createUUID();
+	function beforeAll(){
+		super.beforeAll();
+		// do your own stuff here
+	}
 
-		storage.set( "tester", 1 );
+	function afterAll(){
+		// do your own stuff here
+		super.afterAll();
+	}
 
-		AssertTrue( storage.exists( "tester" ), "Test set & Exists" );
-		AssertEquals( 1, storage.get( "tester" ), "Get & Set Test" );
+/*********************************** BDD SUITES ***********************************/
 
-		AssertFalse( storage.exists( "nothing" ), "False Assertion on exists" );
-		storage.delete( "tester" );
+	function run(){
 
-		expect( storage.get( "tester" ) ).toBeNull();
+		describe( "Main Handler", function(){
 
-		storage.set( "tester", complex );
-		AssertTrue( storage.exists( "tester" ), "Test Complex set & Exists" );
+			beforeEach(function( currentSpec ){
+				// Setup as a new ColdBox request, VERY IMPORTANT. ELSE EVERYTHING LOOKS LIKE THE SAME REQUEST.
+				setup();
+				storage = getModel( "cacheStorage@cbstorages" );
+				storage.clearAll();
+			});
 
-		var r = storage.get( "tester" );
-		assertTrue( isStruct( r ) );
-		assertEquals( complex.id, r.id );
 
-		storage.delete( "tester" );
-		expect( storage.get( "tester" ) ).toBeNull();
+			it( "can create the storage", function(){
+				expect( storage ).toBeComponent();
+				expect( storage.getSize() ).toBe( 0 );
+				expect( storage.isEmpty() ).toBeTrue();
+			});
 
-		storage.clearAll();
 
-		// set/get multi with Keys
-		storage.setMulti( { test : now(), test2 : "luis" } );
-		expect( storage.getMulti( "test,test2" ) ).toHaveLength( 2 );
-		// Get Keys
-		expect( storage.getKeys() )
-			.toBeArray()
-			.toHaveLength( 2 )
-			.toInclude( "test" )
-			.toInclude( "test2" );
+			it( "can use the common methods", function(){
+				// Set, exists, get tests
+				storage.set( "tester", 1 );
+				expect( storage.exists( "tester" ) ).toBeTrue();
+				expect( storage.get( "tester" ) ).toBe( 1 );
+				expect( storage.exists( "nothing" ) ).toBeFalse();
+				expect( storage.isEmpty() ).toBeFalse();
 
-		// deleteMulti
-		var r = storage.deleteMulti( "test,test2,test3" );
-		expect( r.test ).toBeTrue();
-		expect( r.test2 ).toBeTrue();
-		expect( r.test3 ).toBeFalse();
+				// Delete Tests
+				storage.delete( "tester" );
+				// Empty because we are in the same request
+				expect( storage.get( "tester" ) ).toBeNull();
+			});
 
-		expect( storage.getSize() ).toBe( 0 );
-		expect( storage.isEmpty() ).toBeTrue();
-		</cfscript>
-	</cffunction>
-</cfcomponent>
+
+			it( "can work with all multi methods", function(){
+				// Cleanup
+				storage.clearAll();
+
+				// set/get multi with Keys
+				storage.setMulti( { test : now(), test2 : "luis" } );
+				expect( storage.getMulti( "test,test2" ) ).toHaveLength( 2 );
+
+				// Get Keys
+				expect( storage.getKeys() )
+					.toBeArray()
+					.toInclude( "TEST" )
+					.toInclude( "TEST2" );
+
+				// deleteMulti
+				var r = storage.deleteMulti( "test,test2,test3" );
+				expect( r.test ).toBeTrue();
+				expect( r.test2 ).toBeTrue();
+				expect( r.test3 ).toBeFalse();
+			});
+
+
+			it( "can store complex data", function(){
+				var complex = {
+					"date" : now(),
+					"id" : createUUID()
+				};
+				// Store complex data
+				storage.set( "test-complex", complex );
+				expect( storage.exists( "test-complex" ) ).toBeTrue();
+
+				var r = storage.get( "test-complex" );
+				debug( r );
+				expect( r ).toBeStruct();
+				expect( r.id, complex.id );
+			});
+
+		});
+
+	}
+
+}

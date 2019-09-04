@@ -33,6 +33,21 @@ component
 	property name="encryptionEncoding";
 
 	/**
+	 * Use secure cookies or not
+	 */
+	property name="secure" type="boolean";
+
+	/**
+	 * The cookie global domain setting
+	 */
+	property name="domain";
+
+	/**
+	 * If yes, sets cookie as httponly so that it cannot be accessed using JavaScript
+	 */
+	property name="httpOnly" type="boolean";
+
+	/**
 	* Settings
 	*/
 	property name="settings";
@@ -52,8 +67,12 @@ component
 		variables.encryptionSeed 		= arguments.settings.cookieStorage.encryptionSeed;
 		variables.encryption 			= arguments.settings.cookieStorage.useEncryption;
 		variables.encryptionEncoding 	= arguments.settings.cookieStorage.encryptionEncoding;
+		variables.secure 				= arguments.settings.cookieStorage.secure;
+		variables.httpOnly				= arguments.settings.cookieStorage.httpOnly;
+		variables.domain				= arguments.settings.cookieStorage.domain;
 
-		// Cookie Prefixes
+
+		// Cookie Prefix: used for better filtering and cleanups
 		variables.PREFIX = "CBSTORAGE_";
 
 		return this;
@@ -68,6 +87,7 @@ component
 	 * @secure If browser does not support Secure Sockets Layer (SSL) security, the cookie is not sent. To use the cookie, the page must be accessed using the https protocol.
 	 * @path URL, within a domain, to which the cookie applies; typically a directory. Only pages in this path can use the cookie. By default, all pages on the server that set the cookie can access the cookie.
 	 * @domain Domain in which cookie is valid and to which cookie content can be sent from the user's system.
+	 * @httpOnly Apply the httpOnly or use the storage default
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
@@ -75,9 +95,10 @@ component
 		required name,
 		required value,
 		numeric expires=0,
-		boolean secure=false,
-		path="",
-		domain=""
+		boolean secure=variables.secure,
+		string path="",
+		string domain=variables.domain,
+		boolean httpOnly=variables.httpOnly
 	){
 		// Serialize Values
 		var tmpValue = serializeJSON( arguments.value );
@@ -95,7 +116,8 @@ component
 			"name" 		: arguments.name,
 			"value"		: tmpValue,
 			"secure"	: arguments.secure,
-			"expires"	: arguments.expires
+			"expires"	: arguments.expires,
+			"httpOnly"	: arguments.httpOnly
 		};
 
 		// Domain + path info
@@ -112,7 +134,7 @@ component
 		}
 
 		cfcookie( attributeCollection=args );
-		cookie[ arguments.name ] = arguments.value;
+		cookie[ arguments.name ] = tmpValue;
 
 		return this;
 	}
@@ -163,7 +185,12 @@ component
 	 * @domain Domain in which cookie is valid and to which cookie content can be sent from the user's system.
 	 *
 	 */
-	boolean function delete( required name, path="", domain="" ){
+	boolean function delete(
+		required name,
+		string path="",
+		string domain=variables.domain,
+		boolean secure=variables.secure
+	){
 
 		if( exists( arguments.name ) ){
 			// Build out key
@@ -172,7 +199,8 @@ component
 			var args = {
 				"name"		: arguments.name,
 				"expires"	: "NOW",
-				"value"		: ""
+				"value"		: "",
+				"secure"	: arguments.secure
 			};
 
 			// Domain + path info
@@ -190,9 +218,6 @@ component
 
 			cfcookie( attributeCollection=args );
 			structDelete( cookie, arguments.name );
-
-			writeDump( arguments.name );
-			writedump( cookie );abort;
 
 			return true;
 		}
@@ -218,7 +243,11 @@ component
 	 * @return cbstorages.models.IStorage
 	 */
 	CookieStorage function clearAll(){
-
+		for( var thisCookie in cookie ){
+			if( findNoCase( variables.PREFIX, thisCookie, 1 ) ){
+				structDelete( cookie, thisCookie );
+			}
+		}
 		return this;
 	}
 
@@ -237,8 +266,7 @@ component
 	 * @return cbstorages.models.IStorage
 	 */
 	CookieStorage function removeStorage(){
-
-		return this;
+		return clearAll();
 	}
 
 	/**
