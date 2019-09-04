@@ -114,7 +114,6 @@ component
 	RequestStorage function removeStorage(){
 		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
 			structDelete( request, "cbStorage" );
-			request.cbStorage = {};
 		}
 
 		return this;

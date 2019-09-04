@@ -116,7 +116,6 @@ component
 	ApplicationStorage function removeStorage(){
 		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
 			structDelete( application, "cbStorage" );
-			application.cbStorage = {};
 		}
 
 		return this;
