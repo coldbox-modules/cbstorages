@@ -39,9 +39,7 @@ component
 	SessionStorage function set( required name, required value ){
 		var storage = getStorage();
 
-		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
-			storage[ arguments.name ] = arguments.value;
-		}
+		storage[ arguments.name ] = arguments.value;
 
 		return this;
 	}
@@ -55,16 +53,14 @@ component
 	any function get( required name, defaultValue ){
 		var storage = getStorage();
 
-		lock name="#variables.lockName#" type="readonly" timeout="#variables.lockTimeout#" throwOnTimeout=true{
-			// check if exists
-			if( structKeyExists( storage, arguments.name ) ){
-				return storage[ arguments.name ];
-			}
+		// check if exists
+		if( structKeyExists( storage, arguments.name ) ){
+			return storage[ arguments.name ];
+		}
 
-			// default value
-			if( !isNull( arguments.defaultValue ) ){
-				return arguments.defaultValue;
-			}
+		// default value
+		if( !isNull( arguments.defaultValue ) ){
+			return arguments.defaultValue;
 		}
 
 		// if we get here, we return null
@@ -76,12 +72,7 @@ component
 	 * @name The name of the data key
 	 */
 	boolean function delete( required name ){
-		var storage = getStorage();
-
-		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
-			return structDelete( storage, arguments.name, true );
-		}
-
+		return structDelete( getStorage(), arguments.name, true );
 	}
 
 	/**
@@ -123,9 +114,7 @@ component
 		createStorage();
 
 		// Return Storage now that it is guaranteed to exist
-		lock name="#variables.lockName#" type="readonly" timeout="#variables.lockTimeout#" throwOnTimeout=true{
-			return session.cbStorage;
-		}
+		return session.cbStorage;
 	}
 
 	/**
