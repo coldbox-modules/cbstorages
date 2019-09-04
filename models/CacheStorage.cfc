@@ -1,10 +1,15 @@
-/**
-* Copyright Ortus Solutions, Corp
-* www.ortussolutions.com
-* ---
-* This storage leverages cachebox in order to operate. It simulates a session/client storage bucket in cache.
-*/
-component accessors="true" threadsafe singleton{
+ /**
+ * Copyright Ortus Solutions, Corp
+ * www.ortussolutions.com
+ * ---
+ * This storage leverages cachebox in order to operate. It simulates a session/client storage bucket in cache.
+ */
+component
+	accessors="true"
+	extends="AbstractStorage"
+	threadsafe
+	singleton
+{
 
 	/**
 	* The cache provider to use
@@ -30,28 +35,31 @@ component accessors="true" threadsafe singleton{
 	* Constructor
 	* @settings The storage settings struct
 	* @cachebox A reference to CacheBox
-	* @settings.inject coldbox:setting:storages
+	* @settings.inject coldbox:moduleSettings:cbstorages
 	* @cachebox.inject cachebox
 	*/
 	function init( required settings, required cachebox ){
 		// Get application name
 		variables.appName 	= application.applicationName;
-		// Store settings
+		// Store module settings
 		variables.settings 	= arguments.settings;
 		// Default timeout
 		variables.timeout 	= arguments.settings.cacheStorage.timeout;
-		// Provider
+		// Assemble Provider
 		variables.cache 	= arguments.cachebox.getCache( variables.settings.cacheStorage.cachename );
 
 		return this;
 	}
 
 	/**
-	* Set a new variable in storage
-	* @name The name of the data key
-	* @value The value of the data to store
-	*/
-	CacheStorage function setVar( required name, required value ){
+	 * Set a new variable in storage
+	 *
+	 * @name The name of the data key
+	 * @value The value of the data to store
+	 *
+	 * @return cbstorages.models.IStorage
+	 */
+	CacheStorage function set( required name, required value ){
 		var storage = getStorage();
 		// store in bucket
 		storage[ arguments.name ] = arguments.value;
@@ -62,11 +70,12 @@ component accessors="true" threadsafe singleton{
 	}
 
 	/**
-	* Get a new variable in storage if it exists, else return default value, else will return null.
-	* @name The name of the data key
-	* @defaultValue The default value to return if not found in storage
-	*/
-	any function getVar( required name, defaultValue ){
+	 * Get a new variable in storage if it exists, else return default value, else will return null.
+	 *
+	 * @name The name of the data key
+	 * @defaultValue The default value to return if not found in storage
+	 */
+	any function get( required name, defaultValue ){
 		var storage = getStorage();
 		// check if exists
 		if( structKeyExists( storage, arguments.name ) ){
@@ -79,47 +88,42 @@ component accessors="true" threadsafe singleton{
 	}
 
 	/**
-	* Delete a variable in storage
-	* @name The name of the data key
-	*/
-	CacheStorage function deleteVar( required name ){
+	 * Delete a variable in the storage
+	 *
+	 * @name The name of the data key
+	 */
+	boolean function delete( required name ){
 		var storage = getStorage();
 		// verify and delete
 		if( structKeyExists( storage, arguments.name ) ){
 			structDelete( storage, arguments.name );
 			// store it back
 			cache.set( getSessionKey(), storage, variables.timeout, 0 );
+			return true;
 		}
-		return this;
+		return false;
 	}
 
 	/**
-	* Checks wether the permanent variable exists
-	* @name The name of the data key
-	*/
-	boolean function exists( required name ){
-		// check if exists
-		return structKeyExists( getStorage(), arguments.name );
-	}
-
-	/**
-	* Clear the entire coldbox session storage
-	*/
+	 * Clear the entire storage
+	 *
+	 * @return cbstorages.models.IStorage
+	 */
 	CacheStorage function clearAll(){
-		cache.set( getSessionKey(), {}, variables.timeout, 0 );
+		createStorage();
 		return this;
 	}
 
 	/**
-	* Get the entire storage scope from cache. If it does not exist, then create the default bucket
-	*/
+	 * Get the entire storage scope from cache. If it does not exist, then create the default bucket
+	 */
 	struct function getStorage(){
 		var cacheKey = getSessionKey();
 		// get map from cache
 		var storage = cache.get( cacheKey );
 		// Verify, else create it
-		if( isNull( storage ) ){
-			storage = { "sessionid" : cachekey, "timecreated" : now() };
+		if( isNull( local.storage ) ){
+			storage = { "sessionid" : cacheKey, "timecreated" : now() };
 			cache.set( cacheKey, storage, variables.timeout, 0 );
 		}
 
@@ -127,24 +131,47 @@ component accessors="true" threadsafe singleton{
 	}
 
 	/**
-	* Remove the bucket
-	*/
+	 * Remove the storage completely, different from clear, this detaches the entire storage
+	 *
+	 * @return cbstorages.models.IStorage
+	 */
 	CacheStorage function removeStorage(){
 		cache.clear( getSessionKey() );
 		return this;
 	}
 
 	/**
-	* Check if storage exists
-	*/
+	 * Check if storage exists
+	 */
 	boolean function storageExists(){
 		return cache.lookup( getSessionKey() );
 	}
 
 	/**
-	* Builds the unique Session Key of a user request
+	 * Create the storage.
+	 * This initializes an empty session in the cache.
+	 *
+	 * @return cbstorages.models.IStorage
+	 */
+	CacheStorage function createStorage(){
+		var cacheKey = getSessionKey();
+
+		cache.set(
+			cacheKey,
+			{},
+			variables.timeout,
+			0
+		);
+
+		return this;
+	}
+
+	/**************************** CONCRETE METHODS ****************************/
+
+	/**
+	* Builds the unique Session Key of a user request and returns it to you.
 	*/
-	public string function getSessionKey(){
+	string function getSessionKey(){
 		var prefix = "cbstorage:#variables.appName#:";
 
 		// Check jsession id First
@@ -163,7 +190,7 @@ component accessors="true" threadsafe singleton{
 		else if( isDefined( "session" ) and structKeyExists( session, "URLToken" ) ){
 			return prefix & session.URLToken;
 		} else {
-			throw( 
+			throw(
 				message = "Cannot find a jsessionid, URLToken or cfid/cftoken in any scope. Please verify",
 				type 	= "CacheStorage.UniqueKeyException"
 			);

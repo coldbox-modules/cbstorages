@@ -1,139 +1,163 @@
-﻿<!-----------------------------------------------------------------------
-********************************************************************************
-Copyright Since 2005 ColdBox Framework by Luis Majano and Ortus Solutions, Corp
-www.ortussolutions.com
-********************************************************************************
+﻿/**
+* Copyright Ortus Solutions, Corp
+* www.ortussolutions.com
+* ---
+* This storage leverages the application scope for its bucket storage and applies correct locks for access and mutations.
+*/
+component
+	accessors="true"
+	serializable="false"
+	extends="AbstractStorage"
+	threadsafe
+	singleton
+{
 
-Author 	 :	Luis Majano
-Date     :	February 16,2007
-Description :
-	This is a plugin that enables the setting/getting of permanent variables in
-	the session scope.
+	/**
+	* Lock Timeout
+	*/
+	property name="lockTimeout" default="20" type="numeric";
 
-getVar(name,default):any
-setVar(name,value):void
-deleteVar(name):boolean
-exists(name):boolean
-clearAll():void
-getStorage():struct
-clearStorage():void
 
------------------------------------------------------------------------>
-<cfcomponent hint="Session Storage plugin. It provides the user with a mechanism for permanent data storage using the session scope."
-			 output="false"
-			 singleton>
+	/**
+	 * Constructor
+	 */
+	function init(){
+		variables.lockName 		= hash( now() ) & "_SESSION_STORAGE";
+		variables.lockTimeout 	= 20;
 
-<!------------------------------------------- CONSTRUCTOR ------------------------------------------->
+		return this;
+	}
 
-	<cffunction name="init" access="public" returntype="SessionStorage" output="false">
-		<cfscript>
-			// Lock Properties
-			instance.lockTimeout = 20;
-			return this;
-		</cfscript>
-	</cffunction>
+	/**
+	 * Set a new variable in storage
+	 *
+	 * @name The name of the data key
+	 * @value The value of the data to store
+	 *
+	 * @return cbstorages.models.IStorage
+	 */
+	SessionStorage function set( required name, required value ){
+		var storage = getStorage();
 
-<!------------------------------------------- PUBLIC ------------------------------------------->
+		storage[ arguments.name ] = arguments.value;
 
-	<!--- Set a variable --->
-	<cffunction name="setVar" access="public" returntype="void" hint="Set a new permanent variable." output="false">
-		<!--- ************************************************************* --->
-		<cfargument name="name"  type="string" required="true" hint="The name of the variable.">
-		<cfargument name="value" type="any"    required="true" hint="The value to set in the variable.">
-		<!--- ************************************************************* --->
-		<cfset var storage = getStorage()>
+		return this;
+	}
 
-		<cflock scope="session" type="exclusive" timeout="#instance.lockTimeout#" throwontimeout="true">
-			<cfset storage[arguments.name] = arguments.value>
-		</cflock>
-	</cffunction>
+	/**
+	 * Get a new variable in storage if it exists, else return default value, else will return null.
+	 *
+	 * @name The name of the data key
+	 * @defaultValue The default value to return if not found in storage
+	 */
+	any function get( required name, defaultValue ){
+		var storage = getStorage();
 
-	<!--- Get A Variable --->
-	<cffunction name="getVar" access="public" returntype="any" hint="Get a new permanent variable. If the variable does not exist. The method returns blank." output="false">
-		<!--- ************************************************************* --->
-		<cfargument  name="name" 		type="string"  required="true" 		hint="The variable name to retrieve.">
-		<cfargument  name="default"  	type="any"     required="false"  	hint="The default value to set. If not used, a blank is returned." default="">
-		<!--- ************************************************************* --->
-		<cfset var storage = getStorage()>
-		<cfset var results = "">
+		// check if exists
+		if( structKeyExists( storage, arguments.name ) ){
+			return storage[ arguments.name ];
+		}
 
-		<cflock scope="session" type="readonly" timeout="#instance.lockTimeout#" throwontimeout="true">
-			<cfscript>
-				if ( structKeyExists( storage, arguments.name) )
-					results = storage[arguments.name];
-				else
-					results = arguments.default;
-			</cfscript>
-		</cflock>
+		// default value
+		if( !isNull( arguments.defaultValue ) ){
+			return arguments.defaultValue;
+		}
 
-		<cfreturn results>
-	</cffunction>
+		// if we get here, we return null
+	}
 
-	<!--- Delete a variable --->
-	<cffunction name="deleteVar" access="public" returntype="boolean" hint="Tries to delete a permanent session var." output="false">
-		<!--- ************************************************************* --->
-		<cfargument  name="name" type="string" required="true" 	hint="The variable name to retrieve.">
-		<!--- ************************************************************* --->
-		<cfset var results = false>
-		<cfset var storage = getStorage()>
+	/**
+	 * Delete a variable in the storage
+	 *
+	 * @name The name of the data key
+	 */
+	boolean function delete( required name ){
+		return structDelete( getStorage(), arguments.name, true );
+	}
 
-		<cflock scope="session" type="exclusive" timeout="#instance.lockTimeout#" throwontimeout="true">
-			<cfset results = structdelete(storage, arguments.name, true)>
-		</cflock>
+	/**
+	 * Verifies if the named storage key exists
+	 *
+	 * @name The name of the data key
+	 */
+	boolean function exists( required name ){
+		if( !isDefined( "session" ) OR !structKeyExists( session, "cbStorage") ){
+			return false;
+		}
 
-		<cfreturn results>
-	</cffunction>
+		// check if exists
+		return structKeyExists( getStorage(), arguments.name );
+	}
 
-	<!--- Exists check --->
-	<cffunction name="exists" access="public" returntype="boolean" hint="Checks wether the permanent variable exists." output="false">
-		<!--- ************************************************************* --->
-		<cfargument  name="name" type="string" required="true" 	hint="The variable name to retrieve.">
-		<!--- ************************************************************* --->
-		<cfif NOT isDefined("session") OR NOT structKeyExists(session,"cbStorage")>
-			<cfreturn false>
-		<cfelse>
-			<cfreturn structKeyExists( getStorage(), arguments.name)>
-		</cfif>
-	</cffunction>
+	/**
+	 * Clear the entire storage
+	 *
+	 * @return cbstorages.models.IStorage
+	 */
+	SessionStorage function clearAll(){
+		var storage = getStorage();
 
-	<!--- Clear All From Storage --->
-	<cffunction name="clearAll" access="public" returntype="void" hint="Clear the entire coldbox session storage" output="false">
-		<cfset var storage = getStorage()>
+		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
+			structClear( storage );
+		}
 
-		<cflock scope="session" type="exclusive" timeout="#instance.lockTimeout#" throwontimeout="true">
-			<cfset structClear(storage)>
-		</cflock>
-	</cffunction>
+		return this;
+	}
 
-	<!--- Get Storage --->
-	<cffunction name="getStorage" access="public" returntype="any" hint="Get the entire storage scope" output="false" >
-		<cfscript>
-			// Verify Storage Exists
-			createStorage();
-			// Return it
-			return session.cbStorage;
-		</cfscript>
-	</cffunction>
+	/****************************************** STORAGE METHODS ******************************************/
 
-	<!--- remove Storage --->
-	<cffunction name="removeStorage" access="public" returntype="void" hint="remove the entire storage scope" output="false" >
-		<cflock scope="session" type="exclusive" timeout="#instance.lockTimeout#" throwontimeout="true">
-			<cfset structDelete(session, "cbStorage")>
-		</cflock>
-	</cffunction>
+	/**
+	 * Get the entire storage scope structure
+	 */
+	struct function getStorage(){
+		// Verify Storage Exists
+		createStorage();
 
-<!------------------------------------------- PRIVATE ------------------------------------------->
+		// Return Storage now that it is guaranteed to exist
+		return session.cbStorage;
+	}
 
-	<!--- Create Storage --->
-	<cffunction name="createStorage" access="private" returntype="void" hint="Create the session storage scope" output="false" >
-		<cfif isDefined("session") AND NOT structKeyExists(session, "cbStorage")>
-			<!--- Create session Storage Scope --->
-			<cflock scope="session" type="exclusive" timeout="#instance.lockTimeout#" throwontimeout="true">
-				<cfif not structKeyExists(session, "cbStorage")>
-					<cfset session["cbStorage"] = structNew()>
-				</cfif>
-			</cflock>
-		</cfif>
-	</cffunction>
+	/**
+	 * Remove the storage completely, different from clear, this detaches the entire storage
+	 *
+	 * @return cbstorages.models.IStorage
+	 */
+	SessionStorage function removeStorage(){
+		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
+			structDelete( session, "cbStorage" );
+		}
 
-</cfcomponent>
+		return this;
+	}
+
+	/**
+	 * Check if storage exists
+	 */
+	boolean function storageExists(){
+		return !isNull( session.cbStorage );
+	}
+
+	/**
+	 * Create the storage
+	 *
+	 * @return cbstorages.models.IStorage
+	 */
+	SessionStorage function createStorage(){
+
+		if( isDefined( "session" ) && isNull( application.cbStorage ) ){
+
+			lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
+
+				// Double Lock Race Conditions
+				if( isNull( session.cbStorage ) ){
+					session.cbStorage = {};
+				}
+
+			}
+
+		}
+
+		return this;
+	}
+
+}
