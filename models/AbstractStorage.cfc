@@ -7,7 +7,6 @@
 component
 	accessors="true"
 	serializable="false"
-	abstract
 {
 
 	/**
