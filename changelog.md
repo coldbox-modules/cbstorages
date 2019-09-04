@@ -2,8 +2,6 @@
 
 ## 2.0.0
 
-TODO: In Build script add removal of `implements="IStorage"` for the final artifact.
-
 * `feature` : All storages now implement a common interface : `IStorage`
 * `feature` : New interface brings new storageWide methods: `setMulti(), getOrSet(), getMulti(), deleteMulti(), getSize(), getkeys(), isEmpty()`
 * `feature,compat` : ColdBox 4/5 approach to settings instead of in the root, in the `moduleSettings`

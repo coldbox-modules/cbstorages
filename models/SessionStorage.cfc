@@ -8,7 +8,6 @@ component
 	accessors="true"
 	serializable="false"
 	extends="AbstractStorage"
-	implements="IStorage"
 	threadsafe
 	singleton
 {
@@ -37,7 +36,7 @@ component
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function set( required name, required value ){
+	SessionStorage function set( required name, required value ){
 		var storage = getStorage();
 
 		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
@@ -104,7 +103,7 @@ component
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function clearAll(){
+	SessionStorage function clearAll(){
 		var storage = getStorage();
 
 		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
@@ -134,7 +133,7 @@ component
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function removeStorage(){
+	SessionStorage function removeStorage(){
 		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
 			structDelete( session, "cbStorage" );
 		}
@@ -154,7 +153,7 @@ component
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function createStorage(){
+	SessionStorage function createStorage(){
 
 		if( isDefined( "session" ) && isNull( application.cbStorage ) ){
 

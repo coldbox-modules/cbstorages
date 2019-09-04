@@ -17,12 +17,13 @@ component
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function setMulti( required struct map ){
+	AbstractStorage function setMulti( required struct map ){
 
 		arguments.map.each( function( key, value ){
 			set( key, value );
 		} );
 
+		return this;
 	}
 
 	/**
@@ -92,6 +93,16 @@ component
 				result[ key ] = delete( key );
 				return result;
 			}, {} );
+	}
+
+	/**
+	 * Verifies if the named storage key exists
+	 *
+	 * @name The name of the data key
+	 */
+	boolean function exists( required name ){
+		// check if exists
+		return structKeyExists( getStorage(), arguments.name );
 	}
 
 	/**

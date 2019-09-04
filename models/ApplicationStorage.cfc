@@ -8,7 +8,6 @@ component
 	accessors="true"
 	serializable="false"
 	extends="AbstractStorage"
-	implements="IStorage"
 	threadsafe
 	singleton
 {
@@ -40,7 +39,7 @@ component
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function set( required name, required value ){
+	ApplicationStorage function set( required name, required value ){
 		var storage = getStorage();
 
 		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
@@ -89,21 +88,11 @@ component
 	}
 
 	/**
-	 * Verifies if the named storage key exists
-	 *
-	 * @name The name of the data key
-	 */
-	boolean function exists( required name ){
-		// check if exists
-		return structKeyExists( getStorage(), arguments.name );
-	}
-
-	/**
 	 * Clear the entire storage
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function clearAll(){
+	ApplicationStorage function clearAll(){
 		var storage = getStorage();
 
 		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
@@ -133,7 +122,7 @@ component
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function removeStorage(){
+	ApplicationStorage function removeStorage(){
 		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
 			structDelete( application, "cbStorage" );
 		}
@@ -153,7 +142,7 @@ component
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function createStorage(){
+	ApplicationStorage function createStorage(){
 
 		if( isNull( application.cbStorage ) ){
 

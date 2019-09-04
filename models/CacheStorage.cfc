@@ -7,7 +7,6 @@
 component
 	accessors="true"
 	extends="AbstractStorage"
-	implements="IStorage"
 	threadsafe
 	singleton
 {
@@ -36,17 +35,17 @@ component
 	* Constructor
 	* @settings The storage settings struct
 	* @cachebox A reference to CacheBox
-	* @settings.inject coldbox:setting:storages
+	* @settings.inject coldbox:moduleSettings:cbstorages
 	* @cachebox.inject cachebox
 	*/
 	function init( required settings, required cachebox ){
 		// Get application name
 		variables.appName 	= application.applicationName;
-		// Store settings
+		// Store module settings
 		variables.settings 	= arguments.settings;
 		// Default timeout
 		variables.timeout 	= arguments.settings.cacheStorage.timeout;
-		// Provider
+		// Assemble Provider
 		variables.cache 	= arguments.cachebox.getCache( variables.settings.cacheStorage.cachename );
 
 		return this;
@@ -60,7 +59,7 @@ component
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function set( required name, required value ){
+	CacheStorage function set( required name, required value ){
 		var storage = getStorage();
 		// store in bucket
 		storage[ arguments.name ] = arguments.value;
@@ -106,21 +105,11 @@ component
 	}
 
 	/**
-	 * Verifies if the named storage key exists
-	 *
-	 * @name The name of the data key
-	 */
-	boolean function exists( required name ){
-		// check if exists
-		return structKeyExists( getStorage(), arguments.name );
-	}
-
-	/**
 	 * Clear the entire storage
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function clearAll(){
+	CacheStorage function clearAll(){
 		createStorage();
 		return this;
 	}
@@ -146,7 +135,7 @@ component
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function removeStorage(){
+	CacheStorage function removeStorage(){
 		cache.clear( getSessionKey() );
 		return this;
 	}
@@ -164,7 +153,7 @@ component
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function createStorage(){
+	CacheStorage function createStorage(){
 		var cacheKey = getSessionKey();
 
 		cache.set(

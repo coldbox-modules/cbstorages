@@ -8,7 +8,6 @@ component
 	accessors="true"
 	serializable="false"
 	extends="AbstractStorage"
-	implements="IStorage"
 	threadsafe
 	singleton
 {
@@ -28,7 +27,7 @@ component
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function set( required name, required value ){
+	ClientStorage function set( required name, required value ){
 		if( isSimpleValue( arguments.value ) ){
 			client[ arguments.name ] = arguments.value;
 		} else {
@@ -73,21 +72,11 @@ component
 	}
 
 	/**
-	 * Verifies if the named storage key exists
-	 *
-	 * @name The name of the data key
-	 */
-	boolean function exists( required name ){
-		// check if exists
-		return structKeyExists( client, arguments.name );
-	}
-
-	/**
 	 * Clear the entire storage
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function clearAll(){
+	ClientStorage function clearAll(){
 		structClear( client );
 		return this;
 	}
@@ -106,7 +95,7 @@ component
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function removeStorage(){
+	ClientStorage function removeStorage(){
 		return clearAll();
 	}
 
@@ -122,7 +111,7 @@ component
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
-	any function createStorage(){
+	ClientStorage function createStorage(){
 		return this;
 	}
 
