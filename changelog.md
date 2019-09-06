@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.1
+
+* `bug` : [CCM-54](https://ortussolutions.atlassian.net/browse/CCM-54) - Left over bug on session storage looking at app storage
+
 ## 2.0.0
 
 * `feature` : All storages now implement a common interface : `IStorage`
