@@ -144,7 +144,7 @@ component
 	 */
 	SessionStorage function createStorage(){
 
-		if( isDefined( "session" ) && isNull( application.cbStorage ) ){
+		if( isDefined( "session" ) && isNull( session.cbStorage ) ){
 
 			lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
 
