@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.1.0
+
+* `improvement` : Remove `numeric` typing on `expiry` for CookieStorage: The numeric typing on the expires argument will still allow a date object to pass through ( strangely ), but prevents the pass through of the textual arguments allowed by CFCookie: https://helpx.adobe.com/coldfusion/cfml-reference/coldfusion-tags/tags-c/cfcookie.html
+* `improvement` : Added formatting and linting scripts
+* `bug` : Fixed `toMaster` script so it could pull master incase of divergence
+
 ## 2.0.1
 
 * `bug` : [CCM-54](https://ortussolutions.atlassian.net/browse/CCM-54) - Left over bug on session storage looking at app storage

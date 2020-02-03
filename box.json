@@ -1,6 +1,6 @@
 {
     "name":"CBStorages",
-    "version":"2.0.1",
+    "version":"2.1.0",
     "location":"https://downloads.ortussolutions.com/ortussolutions/coldbox-modules/cbstorages/@build.version@/cbstorages-@build.version@.zip",
     "author":"Ortus Solutions.com <info@ortussolutions.com>",
     "slug":"cbstorages",
@@ -35,6 +35,9 @@
         "*/.md"
     ],
     "scripts":{
-        "toMaster":"recipe build/toMaster.boxr"
+		"toMaster":"recipe build/toMaster.boxr",
+		"format":"cfformat run models/**/*.cfc,ModuleConfig.cfc,tests/specs/**/*.cfc,*.cfc --overwrite",
+        "format:check":"cfformat run models/**/*.cfc,ModuleConfig.cfc,tests/specs/**/*.cfc,*.cfc --check",
+        "lint":"cflint models/**.cfc --text --html --json --!exitOnError --suppress"
     }
 }

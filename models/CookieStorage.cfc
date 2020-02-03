@@ -94,7 +94,7 @@ component
 	CookieStorage function set(
 		required name,
 		required value,
-		numeric expires=0,
+		any expires=0,
 		boolean secure=variables.secure,
 		string path="",
 		string domain=variables.domain,
