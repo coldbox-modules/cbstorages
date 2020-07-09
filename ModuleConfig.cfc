@@ -1,9 +1,9 @@
 /**
-* Copyright Ortus Solutions, Corp
-* www.ortussolutions.com
-* ---
-* Module Configuration
-*/
+ * Copyright Ortus Solutions, Corp
+ * www.ortussolutions.com
+ * ---
+ * Module Configuration
+ */
 component {
 
 	// Module Properties

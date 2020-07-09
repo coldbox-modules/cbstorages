@@ -78,7 +78,7 @@ component{
             .toConsole();
     }
 
-     /**
+    /**
      * Run the test suites
      */
     function runTests(){
