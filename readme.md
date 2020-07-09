@@ -1,11 +1,12 @@
 [![Build Status](https://travis-ci.org/coldbox-modules/cbstorages.svg?branch=development)](https://travis-ci.org/coldbox-modules/cbstorages)
 
-# WELCOME TO THE CBSTORAGES MODULE
+# Welcome to the cbStorages Module
 
-The `cbstorages` module will provide you with a collection of **smart** :wink: storage services that will enhance the capabilities of the major ColdFusion (CFML) scopes: 
+The `cbstorages` module will provide you with a collection of **smart** :wink: storage services that will enhance the capabilities of the major ColdFusion (CFML) scopes:
 
 - Application
 - Cache
+- Cgi
 - Client
 - Cookie
 - Request
@@ -46,12 +47,13 @@ Use CommandBox to install
 
 The module registers the following storage mappings:
 
-* `applicationStorage@cbstorages` - For application based storage
-* `clientStorage@cbstorages` - For client based storage
-* `cookieStorage@cbstorages` - For cookie based storage
-* `sessionStorage@cbstorages` - For session based storage
-* `cacheStorage@cbstorages` - For CacheBox based storage simulating session/client
-* `requestStorage@cbstorages` - For request based storage
+- `applicationStorage@cbstorages` - For application based storage
+- `CGIStorage@cbstorages` - For cgi based storage (read-only)
+- `clientStorage@cbstorages` - For client based storage
+- `cookieStorage@cbstorages` - For cookie based storage
+- `sessionStorage@cbstorages` - For session based storage
+- `cacheStorage@cbstorages` - For CacheBox based storage simulating session/client
+- `requestStorage@cbstorages` - For request based storage
 
 You can check out the included [API Docs](https://apidocs.ortussolutions.com/#/coldbox-modules/cbstorages/) to see all the functions you can use for persistence.
 
@@ -217,8 +219,6 @@ interface {
 
 }
 ```
-
-
 
 ********************************************************************************
 Copyright Since 2005 ColdBox Framework by Luis Majano and Ortus Solutions, Corp
