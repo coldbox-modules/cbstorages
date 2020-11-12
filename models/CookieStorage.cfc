@@ -133,8 +133,8 @@ component
 			args[ "domain" ] = arguments.domain;
 		}
 
-		cfcookie( attributeCollection=args );
 		cookie[ arguments.name ] = tmpValue;
+		cfcookie( attributeCollection=args );
 
 		return this;
 	}
