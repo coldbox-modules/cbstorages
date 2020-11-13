@@ -1,6 +1,6 @@
 {
     "name":"CBStorages",
-    "version":"2.2.0",
+    "version":"2.3.0",
     "location":"https://downloads.ortussolutions.com/ortussolutions/coldbox-modules/cbstorages/@build.version@/cbstorages-@build.version@.zip",
     "author":"Ortus Solutions.com <info@ortussolutions.com>",
     "slug":"cbstorages",
@@ -35,9 +35,9 @@
         "*/.md"
     ],
     "scripts":{
-        "release": "recipe build/release.boxr",
-        "format": "cfformat run models/,test-harness/tests/,*.cfc --overwrite",
-        "format:watch": "cfformat watch models/,test-harness/tests/,*.cfc ./.cfformat.json",
-        "format:check": "cfformat check models/,test-harness/tests/,*.cfc"
+        "release":"recipe build/release.boxr",
+        "format":"cfformat run models/,test-harness/tests/,*.cfc --overwrite",
+        "format:watch":"cfformat watch models/,test-harness/tests/,*.cfc ./.cfformat.json",
+        "format:check":"cfformat check models/,test-harness/tests/,*.cfc"
     }
 }

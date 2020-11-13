@@ -11,14 +11,6 @@ component
 	threadsafe
 	singleton
 {
-
-
-	/**
-	* Lock Timeout
-	*/
-	property name="lockTimeout" default="20" type="numeric";
-
-
 	/**
 	 * Constructor
 	 */
