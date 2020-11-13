@@ -10,6 +10,14 @@ component
 {
 
 	/**
+	 * Lock Timeout
+	 */
+	property name="lockTimeout" default="20" type="numeric";
+
+	// Setup defaults
+	variables.lockTimeout = 20;
+
+	/**
 	 * Do a multi-set using a target structure of name-value pairs
 	 *
 	 * @map A struct of name value pairs to store
@@ -41,9 +49,9 @@ component
 		}
 
 		// else, produce it
-		lock name="getOrSet.#variables.lockName#.#arguments.name#" type="exclusive" timeout="#variables.timeout#" throwonTimeout="true"{
+		lock name="getOrSet.#variables.lockName#.#arguments.name#" type="exclusive" timeout="#variables.lockTimeout#" throwonTimeout="true"{
 			// double lock, due to race conditions
-			var target = get( arguments.objectKey );
+			var target = get( arguments.name );
 			if( isNull( local.target ) ){
 				// produce it
 				target = arguments.produce();

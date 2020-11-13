@@ -13,12 +13,6 @@ component
 {
 
 	/**
-	* Lock Timeout
-	*/
-	property name="lockTimeout" default="20" type="numeric";
-
-
-	/**
 	 * Constructor
 	 */
 	function init(){

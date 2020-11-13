@@ -7,7 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## [2.2.0]
+## [2.3.0] => 2020-NOV-13
+
+### Added
+
+* Refactored lock timeouts to be part of the `AbstractStorage` thanks to @wpdebruin
+
+### Fixed
+
+* Invalid argument when using `getOrSet` thanks to @wpdebruin
+* Apply cookies in reverse order so the one with all the attributes is last and is persisted by Eric Peterson <eric@elpete.com>
+
+----
+
+## [2.2.0] => 2020-JUL-09
 
 ### Added
 
@@ -19,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## [2.1.0]
+## [2.1.0] => 2020-FEB-03
 
 * `improvement` : Remove `numeric` typing on `expiry` for CookieStorage: The numeric typing on the expires argument will still allow a date object to pass through ( strangely ), but prevents the pass through of the textual arguments allowed by CFCookie: https://helpx.adobe.com/coldfusion/cfml-reference/coldfusion-tags/tags-c/cfcookie.html
 * `improvement` : Added formatting and linting scripts
