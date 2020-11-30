@@ -94,7 +94,7 @@ component
 	CookieStorage function set(
 		required name,
 		required value,
-		any expires=0,
+		any expires,
 		boolean secure=variables.secure,
 		string path="",
 		string domain=variables.domain,
@@ -116,9 +116,12 @@ component
 			"name" 		: arguments.name,
 			"value"		: tmpValue,
 			"secure"	: arguments.secure,
-			"expires"	: arguments.expires,
 			"httpOnly"	: arguments.httpOnly
 		};
+		//only add expires if existing in arguments to mimic default cookie behaviour
+		if ( !isNull( arguments.expires ) ) {
+			args[ "expires" ] = arguments.expires;
+		}
 
 		// Domain + path info
 		if( len( arguments.path ) && !len( arguments.domain ) ){
