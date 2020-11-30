@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
+## [2.4.0]] => 2020-NOV-30
+
+### Added
+
+* Set `expires` is not defaulted to 0 which eliminates the cookie. It is now expiring as it should using the browser session as the key indicator.
+----
+
 ## [2.3.0] => 2020-NOV-13
 
 ### Added
