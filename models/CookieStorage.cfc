@@ -119,7 +119,7 @@ component
 			"httpOnly"	: arguments.httpOnly
 		};
 		//only add expires if existing in arguments to mimic default cookie behaviour
-		if ( structKeyExists(arguments,"expires")) {
+		if ( !isNull( arguments.expires ) ) {
 			args[ "expires" ] = arguments.expires;
 		}
 
