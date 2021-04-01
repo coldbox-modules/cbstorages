@@ -88,6 +88,7 @@ component
 	 * @path URL, within a domain, to which the cookie applies; typically a directory. Only pages in this path can use the cookie. By default, all pages on the server that set the cookie can access the cookie.
 	 * @domain Domain in which cookie is valid and to which cookie content can be sent from the user's system.
 	 * @httpOnly Apply the httpOnly or use the storage default
+	 * @sameSite Tells browsers when and how to fire cookies in first-or third-party situations. SameSite is used to identify whether or not to allow a cookie to be accessed. Defaults not set. Available options are strict, lax, or none
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
@@ -119,11 +120,11 @@ component
 			"secure"	: arguments.secure,
 			"httpOnly"	: arguments.httpOnly
 		};
-		//only add expires if existing in arguments to mimic default cookie behaviour
+		// only add expires if existing in arguments to mimic default cookie behaviour
 		if ( !isNull( arguments.expires ) ) {
 			args[ "expires" ] = arguments.expires;
 		}
-		//only add samesite if existing in arguments to mimic default cookie behaviour
+		// only add samesite if existing in arguments to mimic default cookie behaviour
 		if ( !isNull( arguments.samesite ) ) {
 			args[ "samesite" ] = arguments.samesite;
 		}

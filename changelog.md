@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
+## [2.5.0]] => 2021-APR-01
+
+* Added `sameSite` argument to setting cookies
+
+----
+
 ## [2.4.0]] => 2020-NOV-30
 
 ### Added
