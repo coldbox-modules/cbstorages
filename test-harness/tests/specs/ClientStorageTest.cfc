@@ -40,7 +40,7 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root"{
 			beforeEach(function( currentSpec ){
 				// Setup as a new ColdBox request, VERY IMPORTANT. ELSE EVERYTHING LOOKS LIKE THE SAME REQUEST.
 				setup();
-				storage = getModel( "clientStorage@cbstorages" );
+				storage = getInstance( "clientStorage@cbstorages" );
 				storage.clearAll();
 			});
 
