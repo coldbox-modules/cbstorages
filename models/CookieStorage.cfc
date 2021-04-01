@@ -98,7 +98,8 @@ component
 		boolean secure=variables.secure,
 		string path="",
 		string domain=variables.domain,
-		boolean httpOnly=variables.httpOnly
+		boolean httpOnly=variables.httpOnly,
+        string samesite
 	){
 		// Serialize Values
 		var tmpValue = serializeJSON( arguments.value );
@@ -121,6 +122,10 @@ component
 		//only add expires if existing in arguments to mimic default cookie behaviour
 		if ( !isNull( arguments.expires ) ) {
 			args[ "expires" ] = arguments.expires;
+		}
+		//only add samesite if existing in arguments to mimic default cookie behaviour
+		if ( !isNull( arguments.samesite ) ) {
+			args[ "samesite" ] = arguments.samesite;
 		}
 
 		// Domain + path info
