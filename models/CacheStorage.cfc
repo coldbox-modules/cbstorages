@@ -173,9 +173,10 @@ component
 	*/
 	string function getSessionKey(){
 		var prefix = "cbstorage:#variables.appName#:";
+		var isSessionDefined = getApplicationMetadata().sessionManagement;
 
 		// Check jsession id First
-		if( isDefined( "session" ) and structKeyExists( session, "sessionid" ) ){
+		if( isSessionDefined and structKeyExists( session, "sessionid" ) ){
 			return "cbstorage:" & session.sessionid;
 		}
 		// Check normal cfid and cftoken in cookie
@@ -187,10 +188,12 @@ component
 			return prefix & hash( URL.cfid & URL.cftoken );
 		}
 		// check session URL Token
-		else if( isDefined( "session" ) and structKeyExists( session, "URLToken" ) ){
+		else if( isSessionDefined and structKeyExists( session, "URLToken" ) ){
 			return prefix & session.URLToken;
+		} else if ( !isSessionDefined) {
+			return prefix & createUUID();
 		} else {
-			throw(
+		    throw(
 				message = "Cannot find a jsessionid, URLToken or cfid/cftoken in any scope. Please verify",
 				type 	= "CacheStorage.UniqueKeyException"
 			);
