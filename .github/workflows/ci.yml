@@ -126,11 +126,6 @@ jobs:
           distribution: "adopt"
           java-version: "11"
 
-      - name: Setup nodejs
-        uses: actions/setup-node@v2
-        with:
-          node-version: 12.x
-
       - name: Cache CommandBox Dependencies
         uses: actions/cache@v1
         if: ${{ true }}
@@ -160,10 +155,6 @@ jobs:
 
       - name: Build ${{ env.MODULE_ID }}
         run: |
-          npm i npm@latest -g
-          npm install
-          npm run prod
-          rm -Rf node_modules
           box install commandbox-docbox
           box task run taskfile=build/Build target=run :version=${{ env.VERSION }} :projectName=${{ env.MODULE_ID }} :buildID=${{ github.run_number }} :branch=${{ env.BRANCH }}
 

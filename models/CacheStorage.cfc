@@ -222,7 +222,7 @@ component
 		}
 		// fallback for no cookie, session or url basically sessionless requests, track the request only
 		else if ( isNull( request.cbStorageId ) ) {
-			request.cbStorageId = createUUID();
+			request.cbStorageId = prefix & createUUID();
 		}
 
 		return request.cbStorageId;
