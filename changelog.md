@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
+## [2.6.0]] => 2021-JUL-22
+
+### Added
+
+* Migration to github actions for CI process
+* Adobe 2021 automated support
+
+
+----
+
 ## [2.5.0]] => 2021-APR-01
 
 * Added `sameSite` argument to setting cookies
