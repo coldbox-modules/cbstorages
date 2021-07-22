@@ -1,13 +1,13 @@
 ﻿/**
-* Copyright Ortus Solutions, Corp
-* www.ortussolutions.com
-* ---
-* This storage leverages the application scope for its bucket storage and applies correct locks for access and mutations.
-*/
+ * Copyright Ortus Solutions, Corp
+ * www.ortussolutions.com
+ * ---
+ * This storage leverages the application scope for its bucket storage and applies correct locks for access and mutations.
+ */
 component
-	accessors="true"
+	accessors   ="true"
 	serializable="false"
-	extends="AbstractStorage"
+	extends     ="AbstractStorage"
 	threadsafe
 	singleton
 {
@@ -16,8 +16,8 @@ component
 	 * Constructor
 	 */
 	function init(){
-		variables.lockName 		= hash( now() ) & "_SESSION_STORAGE";
-		variables.lockTimeout 	= 20;
+		variables.lockName    = hash( now() ) & "_SESSION_STORAGE";
+		variables.lockTimeout = 20;
 
 		return this;
 	}
@@ -48,12 +48,12 @@ component
 		var storage = getStorage();
 
 		// check if exists
-		if( structKeyExists( storage, arguments.name ) ){
+		if ( structKeyExists( storage, arguments.name ) ) {
 			return storage[ arguments.name ];
 		}
 
 		// default value
-		if( !isNull( arguments.defaultValue ) ){
+		if ( !isNull( arguments.defaultValue ) ) {
 			return arguments.defaultValue;
 		}
 
@@ -75,7 +75,7 @@ component
 	 * @name The name of the data key
 	 */
 	boolean function exists( required name ){
-		if( !isDefined( "session" ) OR !structKeyExists( session, "cbStorage") ){
+		if ( !isDefined( "session" ) OR !structKeyExists( session, "cbStorage" ) ) {
 			return false;
 		}
 
@@ -91,7 +91,7 @@ component
 	SessionStorage function clearAll(){
 		var storage = getStorage();
 
-		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
+		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true {
 			structClear( storage );
 		}
 
@@ -117,7 +117,7 @@ component
 	 * @return cbstorages.models.IStorage
 	 */
 	SessionStorage function removeStorage(){
-		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
+		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true {
 			structDelete( session, "cbStorage" );
 		}
 
@@ -137,18 +137,13 @@ component
 	 * @return cbstorages.models.IStorage
 	 */
 	SessionStorage function createStorage(){
-
-		if( isDefined( "session" ) && isNull( session.cbStorage ) ){
-
-			lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
-
+		if ( isDefined( "session" ) && isNull( session.cbStorage ) ) {
+			lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true {
 				// Double Lock Race Conditions
-				if( isNull( session.cbStorage ) ){
+				if ( isNull( session.cbStorage ) ) {
 					session.cbStorage = {};
 				}
-
 			}
-
 		}
 
 		return this;

@@ -1,22 +1,23 @@
 /**
-* Copyright Ortus Solutions, Corp
-* www.ortussolutions.com
-* ---
-* This storage leverages the request scope and create a virtual storage within it
-*/
+ * Copyright Ortus Solutions, Corp
+ * www.ortussolutions.com
+ * ---
+ * This storage leverages the request scope and create a virtual storage within it
+ */
 component
-	accessors="true"
+	accessors   ="true"
 	serializable="false"
-	extends="AbstractStorage"
+	extends     ="AbstractStorage"
 	threadsafe
 	singleton
 {
+
 	/**
 	 * Constructor
 	 */
 	function init(){
-		variables.lockName 		= hash( now() ) & "_REQUEST_STORAGE";
-		variables.lockTimeout 	= 20;
+		variables.lockName    = hash( now() ) & "_REQUEST_STORAGE";
+		variables.lockTimeout = 20;
 
 		createStorage();
 
@@ -49,12 +50,12 @@ component
 		var storage = getStorage();
 
 		// check if exists
-		if( structKeyExists( storage, arguments.name ) ){
+		if ( structKeyExists( storage, arguments.name ) ) {
 			return storage[ arguments.name ];
 		}
 
 		// default value
-		if( !isNull( arguments.defaultValue ) ){
+		if ( !isNull( arguments.defaultValue ) ) {
 			return arguments.defaultValue;
 		}
 
@@ -78,7 +79,7 @@ component
 	RequestStorage function clearAll(){
 		var storage = getStorage();
 
-		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
+		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true {
 			structClear( storage );
 		}
 
@@ -95,7 +96,7 @@ component
 		createStorage();
 
 		// Return Storage now that it is guaranteed to exist
-        return request.cbStorage;
+		return request.cbStorage;
 	}
 
 	/**
@@ -104,7 +105,7 @@ component
 	 * @return cbstorages.models.IStorage
 	 */
 	RequestStorage function removeStorage(){
-		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
+		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true {
 			structDelete( request, "cbStorage" );
 		}
 
@@ -124,18 +125,13 @@ component
 	 * @return cbstorages.models.IStorage
 	 */
 	RequestStorage function createStorage(){
-
-		if( isNull( request.cbStorage ) ){
-
-			lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
-
+		if ( isNull( request.cbStorage ) ) {
+			lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true {
 				// Double Lock Race Conditions
-				if( isNull( request.cbStorage ) ){
+				if ( isNull( request.cbStorage ) ) {
 					request.cbStorage = {};
 				}
-
 			}
-
 		}
 
 		return this;

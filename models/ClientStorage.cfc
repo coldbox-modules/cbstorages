@@ -1,13 +1,13 @@
 ﻿/**
-* Copyright Ortus Solutions, Corp
-* www.ortussolutions.com
-* ---
-* This storage leverages the client scope and will serialize complex objects into JSON if needed.
-*/
+ * Copyright Ortus Solutions, Corp
+ * www.ortussolutions.com
+ * ---
+ * This storage leverages the client scope and will serialize complex objects into JSON if needed.
+ */
 component
-	accessors="true"
+	accessors   ="true"
 	serializable="false"
-	extends="AbstractStorage"
+	extends     ="AbstractStorage"
 	threadsafe
 	singleton
 {
@@ -28,7 +28,7 @@ component
 	 * @return cbstorages.models.IStorage
 	 */
 	ClientStorage function set( required name, required value ){
-		if( isSimpleValue( arguments.value ) ){
+		if ( isSimpleValue( arguments.value ) ) {
 			client[ arguments.name ] = arguments.value;
 		} else {
 			client[ arguments.name ] = serializeJSON( arguments.value );
@@ -44,10 +44,9 @@ component
 	 * @defaultValue The default value to return if not found in storage
 	 */
 	any function get( required name, defaultValue ){
-
 		// Verify
-		if( structKeyExists( client, arguments.name ) ){
-			if( !isJson( client[ arguments.name ] ) ){
+		if ( structKeyExists( client, arguments.name ) ) {
+			if ( !isJSON( client[ arguments.name ] ) ) {
 				return client[ arguments.name ];
 			}
 
@@ -55,7 +54,7 @@ component
 		}
 
 		// default value
-		if( !isNull( arguments.defaultValue ) ){
+		if ( !isNull( arguments.defaultValue ) ) {
 			return arguments.defaultValue;
 		}
 
@@ -114,6 +113,5 @@ component
 	ClientStorage function createStorage(){
 		return this;
 	}
-
 
 }

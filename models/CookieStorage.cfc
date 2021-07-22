@@ -1,13 +1,13 @@
 ﻿/**
-* Copyright Ortus Solutions, Corp
-* www.ortussolutions.com
-* ---
-* This storage the cookie scope and can do complex values as json
-*/
+ * Copyright Ortus Solutions, Corp
+ * www.ortussolutions.com
+ * ---
+ * This storage the cookie scope and can do complex values as json
+ */
 component
-	accessors="true"
+	accessors   ="true"
 	serializable="false"
-	extends="AbstractStorage"
+	extends     ="AbstractStorage"
 	threadsafe
 	singleton
 {
@@ -25,7 +25,10 @@ component
 	/**
 	 * Are we using encryption
 	 */
-	property name="encryption" type="boolean" default="false";
+	property
+		name   ="encryption"
+		type   ="boolean"
+		default="false";
 
 	/**
 	 * The encryption encoding
@@ -48,8 +51,8 @@ component
 	property name="httpOnly" type="boolean";
 
 	/**
-	* Settings
-	*/
+	 * Settings
+	 */
 	property name="settings";
 
 	/**
@@ -60,16 +63,16 @@ component
 	 */
 	function init( required settings ){
 		// Store settings
-		variables.settings 				= arguments.settings;
+		variables.settings = arguments.settings;
 
 		// Set settings
-		variables.encryptionAlgorithm 	= arguments.settings.cookieStorage.encryptionAlgorithm;
-		variables.encryptionSeed 		= arguments.settings.cookieStorage.encryptionSeed;
-		variables.encryption 			= arguments.settings.cookieStorage.useEncryption;
-		variables.encryptionEncoding 	= arguments.settings.cookieStorage.encryptionEncoding;
-		variables.secure 				= arguments.settings.cookieStorage.secure;
-		variables.httpOnly				= arguments.settings.cookieStorage.httpOnly;
-		variables.domain				= arguments.settings.cookieStorage.domain;
+		variables.encryptionAlgorithm = arguments.settings.cookieStorage.encryptionAlgorithm;
+		variables.encryptionSeed      = arguments.settings.cookieStorage.encryptionSeed;
+		variables.encryption          = arguments.settings.cookieStorage.useEncryption;
+		variables.encryptionEncoding  = arguments.settings.cookieStorage.encryptionEncoding;
+		variables.secure              = arguments.settings.cookieStorage.secure;
+		variables.httpOnly            = arguments.settings.cookieStorage.httpOnly;
+		variables.domain              = arguments.settings.cookieStorage.domain;
 
 
 		// Cookie Prefix: used for better filtering and cleanups
@@ -96,11 +99,11 @@ component
 		required name,
 		required value,
 		any expires,
-		boolean secure=variables.secure,
-		string path="",
-		string domain=variables.domain,
-		boolean httpOnly=variables.httpOnly,
-        string samesite
+		boolean secure   = variables.secure,
+		string path      = "",
+		string domain    = variables.domain,
+		boolean httpOnly = variables.httpOnly,
+		string samesite
 	){
 		// Serialize Values
 		var tmpValue = serializeJSON( arguments.value );
@@ -109,16 +112,16 @@ component
 		arguments.name = buildName( arguments.name );
 
 		// encryption?
-		if( variables.encryption ){
+		if ( variables.encryption ) {
 			tmpValue = encryptIt( tmpValue );
 		}
 
 		// Store cookie with expiration info
 		var args = {
-			"name" 		: arguments.name,
-			"value"		: tmpValue,
-			"secure"	: arguments.secure,
-			"httpOnly"	: arguments.httpOnly
+			"name"     : arguments.name,
+			"value"    : tmpValue,
+			"secure"   : arguments.secure,
+			"httpOnly" : arguments.httpOnly
 		};
 		// only add expires if existing in arguments to mimic default cookie behaviour
 		if ( !isNull( arguments.expires ) ) {
@@ -130,20 +133,20 @@ component
 		}
 
 		// Domain + path info
-		if( len( arguments.path ) && !len( arguments.domain ) ){
+		if ( len( arguments.path ) && !len( arguments.domain ) ) {
 			throw(
-				type 	= "CookieStorage.MissingDomainArgument",
+				type    = "CookieStorage.MissingDomainArgument",
 				message = "If you specify path, you must also specify domain."
 			);
-		} else if( len( arguments.path ) && len( arguments.domain ) ){
-			args[ "path" ] 		= arguments.path;
-			args[ "domain" ] 	= arguments.domain;
-		} else if( len( arguments.domain ) ){
+		} else if ( len( arguments.path ) && len( arguments.domain ) ) {
+			args[ "path" ]   = arguments.path;
+			args[ "domain" ] = arguments.domain;
+		} else if ( len( arguments.domain ) ) {
 			args[ "domain" ] = arguments.domain;
 		}
 
 		cookie[ arguments.name ] = tmpValue;
-		cfcookie( attributeCollection=args );
+		cfcookie( attributeCollection = args );
 
 		return this;
 	}
@@ -156,11 +159,10 @@ component
 	 * @defaultValue The default value to return if not found in storage
 	 */
 	any function get( required name, defaultValue ){
-
 		// Check existence
-		if( !exists( arguments.name ) ){
+		if ( !exists( arguments.name ) ) {
 			// check default value
-			if( !isNull( arguments.defaultValue ) ){
+			if ( !isNull( arguments.defaultValue ) ) {
 				return arguments.defaultValue;
 			}
 			// return null
@@ -174,12 +176,12 @@ component
 		var thisValue = cookie[ arguments.name ];
 
 		// encryption?
-		if( variables.encryption ){
+		if ( variables.encryption ) {
 			thisValue = decryptIt( thisValue );
 		}
 
 		// Deserialize?
-		if( isJson( thisValue ) ){
+		if ( isJSON( thisValue ) ) {
 			thisValue = deserializeJSON( thisValue );
 		}
 
@@ -196,36 +198,35 @@ component
 	 */
 	boolean function delete(
 		required name,
-		string path="",
-		string domain=variables.domain,
-		boolean secure=variables.secure
+		string path    = "",
+		string domain  = variables.domain,
+		boolean secure = variables.secure
 	){
-
-		if( exists( arguments.name ) ){
+		if ( exists( arguments.name ) ) {
 			// Build out key
 			arguments.name = buildName( arguments.name );
 			// Prepare cookie keys
-			var args = {
-				"name"		: arguments.name,
-				"expires"	: "NOW",
-				"value"		: "",
-				"secure"	: arguments.secure
+			var args       = {
+				"name"    : arguments.name,
+				"expires" : "NOW",
+				"value"   : "",
+				"secure"  : arguments.secure
 			};
 
 			// Domain + path info
-			if( len( arguments.path ) && !len( arguments.domain ) ){
+			if ( len( arguments.path ) && !len( arguments.domain ) ) {
 				throw(
-					type 	= "CookieStorage.MissingDomainArgument",
+					type    = "CookieStorage.MissingDomainArgument",
 					message = "If you specify path, you must also specify domain."
 				);
-			} else if( len( arguments.path ) && len( arguments.domain ) ){
-				args[ "path" ] 		= arguments.path;
-				args[ "domain" ] 	= arguments.domain;
-			} else if( len( arguments.domain ) ){
+			} else if ( len( arguments.path ) && len( arguments.domain ) ) {
+				args[ "path" ]   = arguments.path;
+				args[ "domain" ] = arguments.domain;
+			} else if ( len( arguments.domain ) ) {
 				args[ "domain" ] = arguments.domain;
 			}
 
-			cfcookie( attributeCollection=args );
+			cfcookie( attributeCollection = args );
 			structDelete( cookie, arguments.name );
 
 			return true;
@@ -252,8 +253,8 @@ component
 	 * @return cbstorages.models.IStorage
 	 */
 	CookieStorage function clearAll(){
-		for( var thisCookie in cookie ){
-			if( findNoCase( variables.PREFIX, thisCookie, 1 ) ){
+		for ( var thisCookie in cookie ) {
+			if ( findNoCase( variables.PREFIX, thisCookie, 1 ) ) {
 				structDelete( cookie, thisCookie );
 			}
 		}
@@ -329,7 +330,7 @@ component
 	 * Build out the cookie name
 	 */
 	private function buildName( required name ){
-		return variables.PREFIX & ucase( arguments.name );
+		return variables.PREFIX & uCase( arguments.name );
 	}
 
 }
