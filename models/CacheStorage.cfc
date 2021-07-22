@@ -1,4 +1,4 @@
- /**
+/**
  * Copyright Ortus Solutions, Corp
  * www.ortussolutions.com
  * ---
@@ -6,47 +6,51 @@
  */
 component
 	accessors="true"
-	extends="AbstractStorage"
+	extends  ="AbstractStorage"
 	threadsafe
 	singleton
 {
 
 	/**
-	* The cache provider to use
-	*/
+	 * The cache provider to use
+	 */
 	property name="cache";
 
 	/**
-	* Application name, comes from the application settings
-	*/
+	 * Application name, comes from the application settings
+	 */
 	property name="appName";
 
 	/**
-	* Session Timeout, defaults to 60 minutes
-	*/
-	property name="timeout" default="60" type="numeric";
+	 * Session Timeout, defaults to 60 minutes
+	 */
+	property
+		name   ="timeout"
+		default="60"
+		type   ="numeric";
 
 	/**
-	* Settings
-	*/
+	 * The module settings defined in ColdBox.cfc
+	 */
 	property name="settings";
 
 	/**
-	* Constructor
-	* @settings The storage settings struct
-	* @cachebox A reference to CacheBox
-	* @settings.inject coldbox:moduleSettings:cbstorages
-	* @cachebox.inject cachebox
-	*/
+	 * Constructor
+	 *
+	 * @settings The storage settings struct
+	 * @cachebox A reference to CacheBox
+	 * @settings.inject coldbox:moduleSettings:cbstorages
+	 * @cachebox.inject cachebox
+	 */
 	function init( required settings, required cachebox ){
 		// Get application name
-		variables.appName 	= application.applicationName;
+		variables.appName  = application.applicationName;
 		// Store module settings
-		variables.settings 	= arguments.settings;
+		variables.settings = arguments.settings;
 		// Default timeout
-		variables.timeout 	= arguments.settings.cacheStorage.timeout;
+		variables.timeout  = arguments.settings.cacheStorage.timeout;
 		// Assemble Provider
-		variables.cache 	= arguments.cachebox.getCache( variables.settings.cacheStorage.cachename );
+		variables.cache    = arguments.cachebox.getCache( variables.settings.cacheStorage.cachename );
 
 		return this;
 	}
@@ -60,11 +64,16 @@ component
 	 * @return cbstorages.models.IStorage
 	 */
 	CacheStorage function set( required name, required value ){
-		var storage = getStorage();
+		var storage               = getStorage();
 		// store in bucket
 		storage[ arguments.name ] = arguments.value;
 		// save it back in cache
-		cache.set( getSessionKey(), storage, variables.timeout, 0 );
+		cache.set(
+			getSessionKey(),
+			storage,
+			variables.timeout,
+			0
+		);
 
 		return this;
 	}
@@ -78,11 +87,11 @@ component
 	any function get( required name, defaultValue ){
 		var storage = getStorage();
 		// check if exists
-		if( structKeyExists( storage, arguments.name ) ){
+		if ( structKeyExists( storage, arguments.name ) ) {
 			return storage[ arguments.name ];
 		}
 		// default value
-		if( structKeyExists( arguments, "defaultValue" ) ){
+		if ( structKeyExists( arguments, "defaultValue" ) ) {
 			return arguments.defaultValue;
 		}
 	}
@@ -95,10 +104,15 @@ component
 	boolean function delete( required name ){
 		var storage = getStorage();
 		// verify and delete
-		if( structKeyExists( storage, arguments.name ) ){
+		if ( structKeyExists( storage, arguments.name ) ) {
 			structDelete( storage, arguments.name );
 			// store it back
-			cache.set( getSessionKey(), storage, variables.timeout, 0 );
+			cache.set(
+				getSessionKey(),
+				storage,
+				variables.timeout,
+				0
+			);
 			return true;
 		}
 		return false;
@@ -120,11 +134,19 @@ component
 	struct function getStorage(){
 		var cacheKey = getSessionKey();
 		// get map from cache
-		var storage = cache.get( cacheKey );
+		var storage  = cache.get( cacheKey );
 		// Verify, else create it
-		if( isNull( local.storage ) ){
-			storage = { "sessionid" : cacheKey, "timecreated" : now() };
-			cache.set( cacheKey, storage, variables.timeout, 0 );
+		if ( isNull( local.storage ) ) {
+			storage = {
+				"sessionid"   : cacheKey,
+				"timecreated" : now()
+			};
+			cache.set(
+				cacheKey,
+				storage,
+				variables.timeout,
+				0
+			);
 		}
 
 		return storage;
@@ -156,12 +178,7 @@ component
 	CacheStorage function createStorage(){
 		var cacheKey = getSessionKey();
 
-		cache.set(
-			cacheKey,
-			{},
-			variables.timeout,
-			0
-		);
+		cache.set( cacheKey, {}, variables.timeout, 0 );
 
 		return this;
 	}
@@ -169,32 +186,46 @@ component
 	/**************************** CONCRETE METHODS ****************************/
 
 	/**
-	* Builds the unique Session Key of a user request and returns it to you.
-	*/
+	 * Builds the unique Session Key of a user request and returns it to you.
+	 * Order of discovery
+	 * 1. identifierProvider closure
+	 * 2. session identifiers
+	 * 3. cookie cfid/cftoken
+	 * 4. url cfid/cftoken
+	 * 5. request based identifier
+	 */
 	string function getSessionKey(){
+		// Setup global storage prefix according to app name in case we have multiple apps with storages
 		var prefix = "cbstorage:#variables.appName#:";
 
+		// Check settings identifier provider
+		if ( !isSimpleValue( variables.settings.cacheStorage.identifierProvider ) ) {
+			return prefix & variables.settings.cacheStorage.identifierProvider();
+		}
+
 		// Check jsession id First
-		if( isDefined( "session" ) and structKeyExists( session, "sessionid" ) ){
-			return "cbstorage:" & session.sessionid;
-		}
-		// Check normal cfid and cftoken in cookie
-		else if( structKeyExists( cookie, "CFID" ) AND structKeyExists( cookie,"CFTOKEN" ) ){
-			return prefix & hash( cookie.cfid & cookie.cftoken );
-		}
-		// Check normal cfid and cftoken in URL
-		else if( structKeyExists( URL, "CFID" ) AND structKeyExists( URL,"CFTOKEN" ) ){
-			return prefix & hash( URL.cfid & URL.cftoken );
+		var isSessionDefined = getApplicationMetadata().sessionManagement;
+		if ( isSessionDefined and structKeyExists( session, "sessionid" ) ) {
+			return prefix & session.sessionid;
 		}
 		// check session URL Token
-		else if( isDefined( "session" ) and structKeyExists( session, "URLToken" ) ){
+		else if ( isSessionDefined and structKeyExists( session, "URLToken" ) ) {
 			return prefix & session.URLToken;
-		} else {
-			throw(
-				message = "Cannot find a jsessionid, URLToken or cfid/cftoken in any scope. Please verify",
-				type 	= "CacheStorage.UniqueKeyException"
-			);
 		}
+		// Check cfid and cftoken in cookie
+		else if ( structKeyExists( cookie, "CFID" ) AND structKeyExists( cookie, "CFTOKEN" ) ) {
+			return prefix & hash( cookie.cfid & cookie.cftoken );
+		}
+		// Check cfid and cftoken in URL
+		else if ( structKeyExists( URL, "CFID" ) AND structKeyExists( URL, "CFTOKEN" ) ) {
+			return prefix & hash( URL.cfid & URL.cftoken );
+		}
+		// fallback for no cookie, session or url basically sessionless requests, track the request only
+		else if ( isNull( request.cbStorageId ) ) {
+			request.cbStorageId = prefix & createUUID();
+		}
+
+		return request.cbStorageId;
 	}
 
 }

@@ -1,13 +1,13 @@
 ﻿/**
-* Copyright Ortus Solutions, Corp
-* www.ortussolutions.com
-* ---
-* This storage leverages the application scope for its bucket storage and applies correct locks for access and mutations.
-*/
+ * Copyright Ortus Solutions, Corp
+ * www.ortussolutions.com
+ * ---
+ * This storage leverages the application scope for its bucket storage and applies correct locks for access and mutations.
+ */
 component
-	accessors="true"
+	accessors   ="true"
 	serializable="false"
-	extends="AbstractStorage"
+	extends     ="AbstractStorage"
 	threadsafe
 	singleton
 {
@@ -16,8 +16,8 @@ component
 	 * Constructor
 	 */
 	function init(){
-		variables.lockName 		= hash( now() ) & "_APPLICATION_STORAGE";
-		variables.lockTimeout 	= 20;
+		variables.lockName    = hash( now() ) & "_APPLICATION_STORAGE";
+		variables.lockTimeout = 20;
 
 		createStorage();
 
@@ -51,12 +51,12 @@ component
 		var storage = getStorage();
 
 		// check if exists
-		if( structKeyExists( storage, arguments.name ) ){
+		if ( structKeyExists( storage, arguments.name ) ) {
 			return storage[ arguments.name ];
 		}
 
 		// default value
-		if( !isNull( arguments.defaultValue ) ){
+		if ( !isNull( arguments.defaultValue ) ) {
 			return arguments.defaultValue;
 		}
 
@@ -82,7 +82,7 @@ component
 	ApplicationStorage function clearAll(){
 		var storage = getStorage();
 
-		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
+		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true {
 			structClear( storage );
 		}
 
@@ -108,7 +108,7 @@ component
 	 * @return cbstorages.models.IStorage
 	 */
 	ApplicationStorage function removeStorage(){
-		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
+		lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true {
 			structDelete( application, "cbStorage" );
 		}
 
@@ -128,18 +128,13 @@ component
 	 * @return cbstorages.models.IStorage
 	 */
 	ApplicationStorage function createStorage(){
-
-		if( isNull( application.cbStorage ) ){
-
-			lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true{
-
+		if ( isNull( application.cbStorage ) ) {
+			lock name="#variables.lockName#" type="exclusive" timeout="#variables.lockTimeout#" throwOnTimeout=true {
 				// Double Lock Race Conditions
-				if( isNull( application.cbStorage ) ){
+				if ( isNull( application.cbStorage ) ) {
 					application.cbStorage = {};
 				}
-
 			}
-
 		}
 
 		return this;
