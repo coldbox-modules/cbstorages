@@ -30,12 +30,13 @@ component
 		type   ="numeric";
 
 	/**
-	 * Settings
+	 * The module settings defined in ColdBox.cfc
 	 */
 	property name="settings";
 
 	/**
 	 * Constructor
+	 *
 	 * @settings The storage settings struct
 	 * @cachebox A reference to CacheBox
 	 * @settings.inject coldbox:moduleSettings:cbstorages
@@ -186,31 +187,45 @@ component
 
 	/**
 	 * Builds the unique Session Key of a user request and returns it to you.
+	 * Order of discovery
+	 * 1. identifierProvider closure
+	 * 2. session identifiers
+	 * 3. cookie cfid/cftoken
+	 * 4. url cfid/cftoken
+	 * 5. request based identifier
 	 */
 	string function getSessionKey(){
+		// Setup global storage prefix according to app name in case we have multiple apps with storages
 		var prefix = "cbstorage:#variables.appName#:";
 
-		// Check jsession id First
-		if ( isDefined( "session" ) and structKeyExists( session, "sessionid" ) ) {
-			return "cbstorage:" & session.sessionid;
+		// Check settings identifier provider
+		if ( !isSimpleValue( variables.settings.cacheStorage.identifierProvider ) ) {
+			return prefix & variables.settings.cacheStorage.identifierProvider();
 		}
-		// Check normal cfid and cftoken in cookie
+
+		// Check jsession id First
+		var isSessionDefined = getApplicationMetadata().sessionManagement;
+		if ( isSessionDefined and structKeyExists( session, "sessionid" ) ) {
+			return prefix & session.sessionid;
+		}
+		// check session URL Token
+		else if ( isSessionDefined and structKeyExists( session, "URLToken" ) ) {
+			return prefix & session.URLToken;
+		}
+		// Check cfid and cftoken in cookie
 		else if ( structKeyExists( cookie, "CFID" ) AND structKeyExists( cookie, "CFTOKEN" ) ) {
 			return prefix & hash( cookie.cfid & cookie.cftoken );
 		}
-		// Check normal cfid and cftoken in URL
+		// Check cfid and cftoken in URL
 		else if ( structKeyExists( URL, "CFID" ) AND structKeyExists( URL, "CFTOKEN" ) ) {
 			return prefix & hash( URL.cfid & URL.cftoken );
 		}
-		// check session URL Token
-		else if ( isDefined( "session" ) and structKeyExists( session, "URLToken" ) ) {
-			return prefix & session.URLToken;
-		} else {
-			throw(
-				message = "Cannot find a jsessionid, URLToken or cfid/cftoken in any scope. Please verify",
-				type    = "CacheStorage.UniqueKeyException"
-			);
+		// fallback for no cookie, session or url basically sessionless requests, track the request only
+		else if ( isNull( request.cbStorageId ) ) {
+			request.cbStorageId = createUUID();
 		}
+
+		return request.cbStorageId;
 	}
 
 }

@@ -40,12 +40,22 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root" {
 			} );
 
 
+			it( "can work with identifier providers", function(){
+				storage.getSettings().cacheStorage.identifierProvider = function(){
+					return "bdd ftw";
+				};
+				try {
+					expect( storage.getSessionKey() ).toInclude( "bdd ftw" );
+				} finally {
+					storage.getSettings().cacheStorage.identifierProvider = "";
+				}
+			} );
+
 			it( "can create the storage", function(){
 				expect( storage ).toBeComponent();
 				expect( storage.getSize() ).toBe( 0 );
 				expect( storage.isEmpty() ).toBeTrue();
 			} );
-
 
 			it( "can use the common methods", function(){
 				// Set, exists, get tests
@@ -60,7 +70,6 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root" {
 				// Empty because we are in the same request
 				expect( storage.get( "tester" ) ).toBeNull();
 			} );
-
 
 			it( "can work with all multi methods", function(){
 				// Cleanup
@@ -82,7 +91,6 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root" {
 				expect( r.test2 ).toBeTrue();
 				expect( r.test3 ).toBeFalse();
 			} );
-
 
 			it( "can store complex data", function(){
 				var complex = { "date" : now(), "id" : createUUID() };

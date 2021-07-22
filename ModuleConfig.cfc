@@ -21,8 +21,14 @@ component {
 		settings = {
 			// Cache Storage Settings
 			cacheStorage : {
-				cachename : "template", // The CacheBox registered cache to store data in
-				timeout   : 60 // The default timeout of the session bucket, defaults to 60
+				// The CacheBox registered cache to store data in
+				cachename          : "template",
+				// The default timeout of the session bucket, defaults to 60
+				timeout            : 60,
+				// The identifierProvider is a closure/udf that will return a unique identifier according to your rules
+				// If you do not provide one, then we will search in session, cookie and url for the ColdFusion identifier.
+				// identifierProvider : function(){}
+				identifierProvider : "" // If it's a simple value, we ignore it.
 			},
 			// Cookie Storage settings
 			cookieStorage : {

@@ -64,8 +64,14 @@ Some storages require further configuration via your configuration file `config/
 ```js
 cbStorages : {
 	cacheStorage : {
-		cachename   : "template", // The CacheBox registered cache to store data in
-		timeout     : 60 // The default timeout of the session bucket, defaults to 60
+		// The CacheBox registered cache to store data in
+		cachename          : "template",
+		// The default timeout of the session bucket, defaults to 60
+		timeout            : 60,
+		// The identifierProvider is a closure/udf that will return a unique identifier according to your rules
+		// If you do not provide one, then we will search in session, cookie and url for the ColdFusion identifier.
+		// identifierProvider : function(){}
+		identifierProvider : "" // If it's a simple value, we ignore it.
 	},
 
 	// Cookie Storage settings
@@ -85,6 +91,24 @@ cbStorages : {
 		// The encryption encoding to use
 		encryptionEncoding 	: "Base64"
 	}
+}
+```
+
+## CacheStorage Unique Tracking Identifiers
+
+The `CacheStorage` leverages a discovery algorithm to determine a user's request in order to store their session information.  The discovery order is the following:
+
+1. identifierProvider closure/lambda/udf
+2. Session identifiers
+3. Cookie identifiers
+4. URL identifiers
+5. Create a unique request identifier
+
+You can use the `identifierProvider` in order to give the storage the unique identifier you want to use. This is useful if you do your own tracking your way. If not, we will use the ColdFusion approaches of `jsessionID` or `cfid/cftoken`.
+
+```js
+identifierProvider = function(){
+	return cookie.myTrackingCookie;
 }
 ```
 

@@ -11,9 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* New setting for `cacheStorage` : `identifierProvider` which can be a closure/lambda/udf that returns a unique tracking identifier for user requests.
+* Improved session detection and fallback to request tracking if no session/cookie/url tracking is discovered thanks to @elpete : https://github.com/coldbox-modules/cbstorages/pull/15/files
 * Migration to github actions for CI process
 * Adobe 2021 automated support
-
 
 ----
 
