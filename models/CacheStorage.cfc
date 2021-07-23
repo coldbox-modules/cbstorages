@@ -44,7 +44,14 @@ component
 	 */
 	function init( required settings, required cachebox ){
 		// Get application name
-		variables.appName  = application.applicationName;
+		variables.appName = application.applicationName;
+
+		// Param cacheStorage Settings
+		param arguments.settings.cacheStorage                    = {};
+		param arguments.settings.cacheStorage.cacheName          = "template";
+		param arguments.settings.cacheStorage.timeout            = 60;
+		param arguments.settings.cacheStorage.identifierProvider = "";
+
 		// Store module settings
 		variables.settings = arguments.settings;
 		// Default timeout
