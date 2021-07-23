@@ -46,6 +46,7 @@ component
 		// Get application name
 		variables.appName  = application.applicationName;
 		// Store module settings
+		param arguments.settings.identifierProvider = "";
 		variables.settings = arguments.settings;
 		// Default timeout
 		variables.timeout  = arguments.settings.cacheStorage.timeout;
