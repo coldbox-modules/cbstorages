@@ -44,13 +44,14 @@ component
 	 */
 	function init( required settings, required cachebox ){
 		// Get application name
-		variables.appName  = application.applicationName;
+		variables.appName                           = application.applicationName;
 		// Store module settings
-		variables.settings = arguments.settings;
+		param arguments.settings.identifierProvider = "";
+		variables.settings                          = arguments.settings;
 		// Default timeout
-		variables.timeout  = arguments.settings.cacheStorage.timeout;
+		variables.timeout                           = arguments.settings.cacheStorage.timeout;
 		// Assemble Provider
-		variables.cache    = arguments.cachebox.getCache( variables.settings.cacheStorage.cachename );
+		variables.cache                             = arguments.cachebox.getCache( variables.settings.cacheStorage.cachename );
 
 		return this;
 	}
