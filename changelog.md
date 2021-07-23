@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
+## [2.6.1]] => 2021-JUL-23
+
+### Fixed
+
+* Added params to the cache storage settings to avoid missing setting exceptions
+
+----
+
 ## [2.6.0]] => 2021-JUL-22
 
 ### Added
