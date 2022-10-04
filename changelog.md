@@ -7,7 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## [2.6.1]] => 2021-JUL-23
+## [3.0.0] => 2022-OCT-4
+
+### Added
+
+* New ortus module support
+
+### Changed
+
+* Removed ACF 2016 support
+
+----
+
+## [2.6.1] => 2021-JUL-23
 
 ### Fixed
 
