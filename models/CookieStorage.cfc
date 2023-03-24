@@ -145,7 +145,6 @@ component
 			args[ "domain" ] = arguments.domain;
 		}
 
-		cookie[ arguments.name ] = tmpValue;
 		cfcookie( attributeCollection = args );
 
 		return this;
