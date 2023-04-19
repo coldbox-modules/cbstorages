@@ -37,7 +37,7 @@ component accessors="true" serializable="false" {
 	 * call the `produce` closure/lambda to produce the required value and store it
 	 * in the storage using the passed named key.
 	 *
-	 * @name The name of the key to get
+	 * @name    The name of the key to get
 	 * @produce The closure/lambda to execute that should produce the value
 	 */
 	any function getOrSet( required name, required any produce ){

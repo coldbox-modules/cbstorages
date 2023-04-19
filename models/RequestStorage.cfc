@@ -27,7 +27,7 @@ component
 	/**
 	 * Set a new variable in storage
 	 *
-	 * @name The name of the data key
+	 * @name  The name of the data key
 	 * @value The value of the data to store
 	 *
 	 * @return cbstorages.models.IStorage
@@ -43,7 +43,7 @@ component
 	/**
 	 * Get a new variable in storage if it exists, else return default value, else will return null.
 	 *
-	 * @name The name of the data key
+	 * @name         The name of the data key
 	 * @defaultValue The default value to return if not found in storage
 	 */
 	any function get( required name, defaultValue ){
