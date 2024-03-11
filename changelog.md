@@ -5,9 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-****
+* * *
 
 ## [Unreleased]
+
+## [3.1.0] - 2024-03-11
 
 ### Added
 
@@ -21,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Consolidated `lockNames` so there are no missing ones used by the abstract cache.
 
-****
+* * *
 
 ## [3.0.1] => 2023-MAR-27
 
@@ -39,7 +41,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed ACF 2016 support
 
-
 ## [2.6.1] => 2021-JUL-23
 
 ### Fixed
@@ -51,10 +52,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - New setting for `cacheStorage` : `identifierProvider` which can be a closure/lambda/udf that returns a unique tracking identifier for user requests.
-- Improved session detection and fallback to request tracking if no session/cookie/url tracking is discovered thanks to @elpete : https://github.com/coldbox-modules/cbstorages/pull/15/files
+- Improved session detection and fallback to request tracking if no session/cookie/url tracking is discovered thanks to @elpete : <https://github.com/coldbox-modules/cbstorages/pull/15/files>
 - Migration to github actions for CI process
 - Adobe 2021 automated support
-
 
 ## [2.5.0] => 2021-APR-01
 
@@ -76,7 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Invalid argument when using `getOrSet` thanks to @wpdebruin
-- Apply cookies in reverse order so the one with all the attributes is last and is persisted by Eric Peterson <eric@elpete.com>
+- Apply cookies in reverse order so the one with all the attributes is last and is persisted by Eric Peterson [eric@elpete.com](mailto:eric@elpete.com)
 
 ## [2.2.0] => 2020-JUL-09
 
@@ -90,7 +90,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.1.0] => 2020-FEB-03
 
-- `improvement` : Remove `numeric` typing on `expiry` for CookieStorage: The numeric typing on the expires argument will still allow a date object to pass through ( strangely ), but prevents the pass through of the textual arguments allowed by CFCookie: https://helpx.adobe.com/coldfusion/cfml-reference/coldfusion-tags/tags-c/cfcookie.html
+- `improvement` : Remove `numeric` typing on `expiry` for CookieStorage: The numeric typing on the expires argument will still allow a date object to pass through ( strangely ), but prevents the pass through of the textual arguments allowed by CFCookie: <https://helpx.adobe.com/coldfusion/cfml-reference/coldfusion-tags/tags-c/cfcookie.html>
 - `improvement` : Added formatting and linting scripts
 - `bug` : Fixed `toMaster` script so it could pull master incase of divergence
 
@@ -107,7 +107,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `improvement` : Dropped Lucee4.5 and ACF11 support
 - `improvement` : Script migrations
 - `feature` : Added support for httpOnly and secure cookies in the cookie storage.
-- `improvement` : Added option to specify path when deleting a cookie. Without this option, the cookie is never deleted when specifying a path when creating a cookie. https://github.com/coldbox-modules/cbstorages/pull/7 (@donbellamy)
+- `improvement` : Added option to specify path when deleting a cookie. Without this option, the cookie is never deleted when specifying a path when creating a cookie. <https://github.com/coldbox-modules/cbstorages/pull/7> (@donbellamy)
 - `improvement` : TestBox 3 upgrade
 - `improvement` : Mark all storages as `serializable=false` to avoid serialization issues
 - `compat` : Removed `ClusterStorage` as this was a lucee only feature that actually never released.
@@ -117,7 +117,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update new template approach
 - Renamed repo
-- Change `getSessionKey` to public method: https://github.com/coldbox-modules/cbox-storages/pull/6
+- Change `getSessionKey` to public method: <https://github.com/coldbox-modules/cbox-storages/pull/6>
 
 ## [1.4.0]
 
@@ -146,3 +146,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0]
 
 - Create first module version
+
+[Unreleased]: https://github.com/coldbox-modules/cbstorages/compare/v3.1.0...HEAD
+
+[3.1.0]: https://github.com/coldbox-modules/cbstorages/compare/9b01af208b6c582715b2dd02ce9678e3a6ea1532...v3.1.0

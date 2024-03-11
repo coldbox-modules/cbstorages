@@ -1,6 +1,6 @@
 {
     "name":"CBStorages",
-    "version":"3.1.0",
+    "version":"3.2.0",
     "location":"https://downloads.ortussolutions.com/ortussolutions/coldbox-modules/cbstorages/@build.version@/cbstorages-@build.version@.zip",
     "author":"Ortus Solutions.com <info@ortussolutions.com>",
     "slug":"cbstorages",
@@ -51,14 +51,14 @@
         "format:watch":"cfformat watch ModuleConfig.cfc,models/,test-harness/tests/**/*.cfc ./.cfformat.json",
         "format:check":"cfformat check ModuleConfig.cfc,models/,test-harness/tests/**/*.cfc ./.cfformat.json",
         "install:dependencies":"install && cd test-harness && install",
-		"start:lucee" : "server start serverConfigFile=server-lucee@5.json",
-		"start:2018" : "server start serverConfigFile=server-adobe@2018.json",
-		"start:2021" : "server start serverConfigFile=server-adobe@2021.json",
-		"stop:lucee" : "server stop serverConfigFile=server-lucee@5.json",
-		"stop:2018" : "server stop serverConfigFile=server-adobe@2018.json",
-		"stop:2021" : "server stop serverConfigFile=server-adobe@2021.json",
-		"logs:lucee" : "server log serverConfigFile=server-lucee@5.json --follow",
-		"logs:2018" : "server log serverConfigFile=server-adobe@2018.json --follow",
-		"logs:2021" : "server log serverConfigFile=server-adobe@2021.json --follow"
+        "start:lucee":"server start serverConfigFile=server-lucee@5.json",
+        "start:2018":"server start serverConfigFile=server-adobe@2018.json",
+        "start:2021":"server start serverConfigFile=server-adobe@2021.json",
+        "stop:lucee":"server stop serverConfigFile=server-lucee@5.json",
+        "stop:2018":"server stop serverConfigFile=server-adobe@2018.json",
+        "stop:2021":"server stop serverConfigFile=server-adobe@2021.json",
+        "logs:lucee":"server log serverConfigFile=server-lucee@5.json --follow",
+        "logs:2018":"server log serverConfigFile=server-adobe@2018.json --follow",
+        "logs:2021":"server log serverConfigFile=server-adobe@2021.json --follow"
     }
 }
