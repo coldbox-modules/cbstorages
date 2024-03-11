@@ -16,6 +16,8 @@ component
 	 * Constructor
 	 */
 	function init(){
+		variables.lockName    = hash( now() ) & "_CLIENT_STORAGE";
+		variables.lockTimeout = 20;
 		return this;
 	}
 

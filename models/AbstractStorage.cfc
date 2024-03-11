@@ -14,8 +14,14 @@ component accessors="true" serializable="false" {
 		default="20"
 		type   ="numeric";
 
+	/**
+	 * Lock Name : If you want to lock the storage, you can provide a lock name
+	 */
+	property name="lockName" type="string" default="";
+
 	// Setup defaults
 	variables.lockTimeout = 20;
+	variables.lockName = hash( now() );
 
 	/**
 	 * Do a multi-set using a target structure of name-value pairs

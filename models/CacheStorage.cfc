@@ -43,6 +43,10 @@ component
 	 * @cachebox.inject cachebox
 	 */
 	function init( required settings, required cachebox ){
+		// Locks
+		variables.lockName    = hash( now() ) & "_CACHE_STORAGE";
+		variables.lockTimeout = 20;
+
 		// Get application name
 		variables.appName = application.applicationName;
 

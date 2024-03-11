@@ -62,6 +62,10 @@ component
 	 * @settings.inject coldbox:moduleSettings:cbStorages
 	 */
 	function init( required settings ){
+		// Lock Settings
+		variables.lockName    = hash( now() ) & "_COOKIE_STORAGE";
+		variables.lockTimeout = 20;
+
 		// Store settings
 		variables.settings = arguments.settings;
 
