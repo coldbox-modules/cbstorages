@@ -37,12 +37,16 @@ component
 	/**
 	 * Constructor
 	 *
-	 * @settings The storage settings struct
-	 * @cachebox A reference to CacheBox
+	 * @settings        The storage settings struct
+	 * @cachebox        A reference to CacheBox
 	 * @settings.inject coldbox:moduleSettings:cbstorages
 	 * @cachebox.inject cachebox
 	 */
 	function init( required settings, required cachebox ){
+		// Locks
+		variables.lockName    = hash( now() ) & "_CACHE_STORAGE";
+		variables.lockTimeout = 20;
+
 		// Get application name
 		variables.appName = application.applicationName;
 
@@ -65,7 +69,7 @@ component
 	/**
 	 * Set a new variable in storage
 	 *
-	 * @name The name of the data key
+	 * @name  The name of the data key
 	 * @value The value of the data to store
 	 *
 	 * @return cbstorages.models.IStorage
@@ -75,12 +79,7 @@ component
 		// store in bucket
 		storage[ arguments.name ] = arguments.value;
 		// save it back in cache
-		cache.set(
-			getSessionKey(),
-			storage,
-			variables.timeout,
-			0
-		);
+		cache.set( getSessionKey(), storage, variables.timeout, 0 );
 
 		return this;
 	}
@@ -88,7 +87,7 @@ component
 	/**
 	 * Get a new variable in storage if it exists, else return default value, else will return null.
 	 *
-	 * @name The name of the data key
+	 * @name         The name of the data key
 	 * @defaultValue The default value to return if not found in storage
 	 */
 	any function get( required name, defaultValue ){
@@ -114,12 +113,7 @@ component
 		if ( structKeyExists( storage, arguments.name ) ) {
 			structDelete( storage, arguments.name );
 			// store it back
-			cache.set(
-				getSessionKey(),
-				storage,
-				variables.timeout,
-				0
-			);
+			cache.set( getSessionKey(), storage, variables.timeout, 0 );
 			return true;
 		}
 		return false;
@@ -144,16 +138,8 @@ component
 		var storage  = cache.get( cacheKey );
 		// Verify, else create it
 		if ( isNull( local.storage ) ) {
-			storage = {
-				"sessionid"   : cacheKey,
-				"timecreated" : now()
-			};
-			cache.set(
-				cacheKey,
-				storage,
-				variables.timeout,
-				0
-			);
+			storage = { "sessionid" : cacheKey, "timecreated" : now() };
+			cache.set( cacheKey, storage, variables.timeout, 0 );
 		}
 
 		return storage;

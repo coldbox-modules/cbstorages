@@ -112,14 +112,7 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root" {
 				expect( storage.get( "tester-encrypt" ) ).toBe( 1 );
 
 				/* Set Complex */
-				storage.set(
-					"tester-encrypt",
-					{
-						"name" : "luis",
-						"now"  : now(),
-						"kids" : [ 1, 2, 3 ]
-					}
-				);
+				storage.set( "tester-encrypt", { "name" : "luis", "now" : now(), "kids" : [ 1, 2, 3 ] } );
 				expect( storage.exists( "tester-encrypt" ) ).toBeTrue();
 				expect( storage.get( "tester-encrypt" ) ).toBeStruct();
 			} );

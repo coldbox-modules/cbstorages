@@ -14,8 +14,17 @@ component accessors="true" serializable="false" {
 		default="20"
 		type   ="numeric";
 
+	/**
+	 * Lock Name : If you want to lock the storage, you can provide a lock name
+	 */
+	property
+		name   ="lockName"
+		type   ="string"
+		default="";
+
 	// Setup defaults
 	variables.lockTimeout = 20;
+	variables.lockName    = hash( now() );
 
 	/**
 	 * Do a multi-set using a target structure of name-value pairs
@@ -37,7 +46,7 @@ component accessors="true" serializable="false" {
 	 * call the `produce` closure/lambda to produce the required value and store it
 	 * in the storage using the passed named key.
 	 *
-	 * @name The name of the key to get
+	 * @name    The name of the key to get
 	 * @produce The closure/lambda to execute that should produce the value
 	 */
 	any function getOrSet( required name, required any produce ){

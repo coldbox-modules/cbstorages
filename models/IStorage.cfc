@@ -9,7 +9,7 @@ interface {
 	/**
 	 * Set a new variable in storage
 	 *
-	 * @name The name of the data key
+	 * @name  The name of the data key
 	 * @value The value of the data to store
 	 *
 	 * @return cbstorages.models.IStorage
@@ -28,7 +28,7 @@ interface {
 	/**
 	 * Get a new variable in storage if it exists, else return default value, else will return null.
 	 *
-	 * @name The name of the data key
+	 * @name         The name of the data key
 	 * @defaultValue The default value to return if not found in storage
 	 */
 	any function get( required name, defaultValue );
@@ -38,7 +38,7 @@ interface {
 	 * call the `produce` closure/lambda to produce the required value and store it
 	 * in the storage using the passed named key.
 	 *
-	 * @name The name of the key to get
+	 * @name    The name of the key to get
 	 * @produce The closure/lambda to execute that should produce the value
 	 */
 	any function getOrSet( required name, required any produce );
@@ -116,7 +116,6 @@ interface {
 
 	/**
 	 * Create the storage
-	 *
 	 *
 	 * @return cbstorages.models.IStorage
 	 */
