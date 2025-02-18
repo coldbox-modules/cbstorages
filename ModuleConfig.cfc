@@ -42,10 +42,10 @@ component {
 				useEncryption       : false,
 				// The unique seeding key to use: keep it secret, keep it safe
 				encryptionSeed      : "CBStorages",
-				// The algorithm to use: https://cfdocs.org/encrypt
-				encryptionAlgorithm : "CFMX_COMPAT",
+				// The algorithm to use: AES, BLOWFISH, DES, 3DES, RC4
+				encryptionAlgorithm : "AES",
 				// The encryption encoding to use
-				encryptionEncoding  : "Base64"
+				encryptionEncoding  : "UU"
 			}
 		};
 	}
