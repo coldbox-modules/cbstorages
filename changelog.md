@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Harder encryption to AES for the `CookieStorage`
+- New `CookieStorage` setting `encryptionKey` to allow for a custom encryption key for the cookie value
 - BoxLang certification
 - Adobe 2023 certification
 
