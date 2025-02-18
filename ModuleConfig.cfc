@@ -41,7 +41,7 @@ component {
 				// Use encryption of values
 				useEncryption       : false,
 				// The encryption key to use for the encryption
-				encryptionKey : generateSecretKey( "AES", "128" ),
+				encryptionKey       : generateSecretKey( "AES", "128" ),
 				// The unique seeding key to use: keep it secret, keep it safe
 				encryptionSeed      : "CBStorages",
 				// The algorithm to use: AES, BLOWFISH, DES, 3DES, RC4
