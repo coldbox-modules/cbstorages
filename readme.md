@@ -17,7 +17,7 @@
 
 # Welcome to the cbStorages Module
 
-The `cbstorages` module will provide you with a collection of **smart** :wink: storage services that will enhance the capabilities of the major ColdFusion (CFML) scopes:
+The `cbstorages` module will provide you with a collection of **smart** :wink: storage services that will enhance the capabilities of the major persistence scopes:
 
 - Application
 - Cache
