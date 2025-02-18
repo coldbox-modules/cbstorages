@@ -48,7 +48,7 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root" {
 			it( "can use the common methods", function(){
 				// Set, exists, get tests
 				expect( storage.exists( "script_name" ) ).toBeTrue();
-				expect( storage.get( "path_info" ) ).toBe( cgi.PATH_INFO );
+				expect( cgi.PATH_INFO ).toBe( storage.get( "path_info" ) );
 				expect( storage.exists( "nothing" ) ).toBeFalse();
 				expect( storage.isEmpty() ).toBeFalse();
 			} );
