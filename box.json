@@ -29,6 +29,7 @@
     "dependencies":{},
     "devDependencies":{
         "commandbox-cfformat":"*",
+		"commandbox-boxlang":"*",
         "commandbox-docbox":"*",
         "commandbox-dotenv":"*",
         "commandbox-cfconfig":"*"
