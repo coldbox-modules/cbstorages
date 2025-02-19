@@ -45,7 +45,7 @@ component {
 
 		// If hitting the runner or specs, prep our virtual app
 		if ( getBaseTemplatePath().replace( expandPath( "/tests" ), "" ).reFindNoCase( "(runner|specs)" ) ) {
-			request.coldBoxVirtualApp.startup();
+			request.coldBoxVirtualApp.startup( true );
 		}
 
 		// ORM Reload for fresh results

@@ -39,22 +39,19 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root" {
 				storage.clearAll();
 			} );
 
-
 			it( "can create the storage", function(){
 				expect( storage ).toBeComponent();
 				expect( storage.getSize() ).toBeGT( 0 );
 				expect( storage.isEmpty() ).toBeFalse();
 			} );
 
-
 			it( "can use the common methods", function(){
 				// Set, exists, get tests
 				expect( storage.exists( "script_name" ) ).toBeTrue();
-				expect( storage.get( "path_info" ) ).toBe( cgi.PATH_INFO );
+				expect( cgi.PATH_INFO ).toBe( storage.get( "path_info" ) );
 				expect( storage.exists( "nothing" ) ).toBeFalse();
 				expect( storage.isEmpty() ).toBeFalse();
 			} );
-
 
 			it( "can work with all multi methods", function(){
 				// Get Keys

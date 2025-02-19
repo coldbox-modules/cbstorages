@@ -104,7 +104,6 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root" {
 			it( "can test all methods with encryption", function(){
 				/* set Encryption */
 				storage.setEncryption( true );
-				storage.setEncryptionSeed( "My#createUUID()#-Unit Test Key" );
 
 				/* Set Single */
 				storage.set( "tester-encrypt", 1 );

@@ -17,7 +17,7 @@
 
 # Welcome to the cbStorages Module
 
-The `cbstorages` module will provide you with a collection of **smart** :wink: storage services that will enhance the capabilities of the major ColdFusion (CFML) scopes:
+The `cbstorages` module will provide you with a collection of **smart** :wink: storage services that will enhance the capabilities of the major persistence scopes:
 
 - Application
 - Cache
@@ -99,10 +99,12 @@ cbStorages : {
 		domain 				: "",
 		// Use encryption of values
 		useEncryption 		: false,
+		// The encryption key to use for the encryption
+		encryptionKey : generateSecretKey( "AES", "128" ),
 		// The unique seeding key to use: keep it secret, keep it safe
 		encryptionSeed 		: "CBStorages",
 		// The algorithm to use: https://cfdocs.org/encrypt
-		encryptionAlgorithm : "CFMX_COMPAT",
+		encryptionAlgorithm : "AES",
 		// The encryption encoding to use
 		encryptionEncoding 	: "Base64"
 	}

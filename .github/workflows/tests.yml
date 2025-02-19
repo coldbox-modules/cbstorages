@@ -10,7 +10,7 @@ on:
 jobs:
   tests:
     name: Tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     env:
       DB_USER: root
       DB_PASSWORD: root
@@ -18,8 +18,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        cfengine: [ "lucee@5", "adobe@2018", "adobe@2021", "adobe@2023" ]
-        coldboxVersion: [ "^6.0.0", "^7.0.0" ]
+        cfengine: [ "boxlang-cfml@1", "lucee@5", "lucee@6", "adobe@2021", "adobe@2023" ]
+        coldboxVersion: [ "^7.0.0" ]
         experimental: [ false ]
         # Experimental: ColdBox BE vs All Engines
         include:
@@ -35,6 +35,9 @@ jobs:
           - coldboxVersion: "be"
             cfengine: "adobe@2023"
             experimental: true
+          - coldboxVersion: "be"
+            cfengine: "boxlang-cfml@1"
+            experimental: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -43,15 +46,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: "temurin"
-          java-version: "11"
-
-      # - name: Setup Database and Fixtures
-      #   run: |
-      #     sudo systemctl start mysql.service
-      #     # Create Database
-      #     #mysql -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} -e 'CREATE DATABASE cbsecurity;'
-      #     # Import Database
-      #     mysql -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} < test-harness/tests/resources/cbsecurity.sql
+          java-version: "21"
 
       - name: Setup Environment For Testing Process
         run: |

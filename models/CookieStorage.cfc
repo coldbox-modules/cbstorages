@@ -5,9 +5,9 @@
  * This storage the cookie scope and can do complex values as json
  */
 component
+	extends     ="AbstractStorage"
 	accessors   ="true"
 	serializable="false"
-	extends     ="AbstractStorage"
 	threadsafe
 	singleton
 {
@@ -16,6 +16,11 @@ component
 	 * The cookie encryption algorithm
 	 */
 	property name="encryptionAlgorithm";
+
+	/**
+	 * The encryption key to use
+	 */
+	property name="encryptionKey";
 
 	/**
 	 * The cookie encryption seed
@@ -73,11 +78,11 @@ component
 		variables.encryptionAlgorithm = arguments.settings.cookieStorage.encryptionAlgorithm;
 		variables.encryptionSeed      = arguments.settings.cookieStorage.encryptionSeed;
 		variables.encryption          = arguments.settings.cookieStorage.useEncryption;
+		variables.encryptionKey       = arguments.settings.cookieStorage.encryptionKey;
 		variables.encryptionEncoding  = arguments.settings.cookieStorage.encryptionEncoding;
 		variables.secure              = arguments.settings.cookieStorage.secure;
 		variables.httpOnly            = arguments.settings.cookieStorage.httpOnly;
 		variables.domain              = arguments.settings.cookieStorage.domain;
-
 
 		// Cookie Prefix: used for better filtering and cleanups
 		variables.PREFIX = "CBSTORAGE_";
@@ -308,9 +313,10 @@ component
 	private function encryptIt( required target ){
 		return encrypt(
 			arguments.target,
-			getEncryptionSeed(),
+			getEncryptionKey(),
 			getEncryptionAlgorithm(),
-			getEncryptionEncoding()
+			getEncryptionEncoding(),
+			getEncryptionSeed()
 		);
 	}
 
@@ -322,9 +328,10 @@ component
 	private function decryptIt( required target ){
 		return decrypt(
 			arguments.target,
-			getEncryptionSeed(),
+			getEncryptionKey(),
 			getEncryptionAlgorithm(),
-			getEncryptionEncoding()
+			getEncryptionEncoding(),
+			getEncryptionSeed()
 		);
 	}
 
