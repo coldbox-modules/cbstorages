@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- ColdBox 6 auto-testing, as it has entered security fixes phase now.
+
 ### Added
 
 - Harder encryption to AES for the `CookieStorage`

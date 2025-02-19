@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         cfengine: [ "boxlang-cfml@1", "lucee@5", "lucee@6", "adobe@2021", "adobe@2023" ]
-        coldboxVersion: [ "^6.0.0", "^7.0.0" ]
+        coldboxVersion: [ "^7.0.0" ]
         experimental: [ false ]
         # Experimental: ColdBox BE vs All Engines
         include:
