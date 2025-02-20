@@ -28,11 +28,9 @@
     ],
     "dependencies":{},
     "devDependencies":{
-        "commandbox-cfformat":"*",
         "commandbox-boxlang":"*",
-        "commandbox-docbox":"*",
-        "commandbox-dotenv":"*",
-        "commandbox-cfconfig":"*"
+        "commandbox-cfformat":"*",
+        "commandbox-docbox":"*"
     },
     "installPaths":{},
     "ignore":[
