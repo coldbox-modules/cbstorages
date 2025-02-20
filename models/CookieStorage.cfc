@@ -68,7 +68,7 @@ component
 		"encryptionKey"       : generateSecretKey( "AES", "128" ),
 		"encryptionSeed"      : "CBStorages",
 		"encryptionEncoding"  : "base64",
-		"useEncryption"          : false,
+		"useEncryption"       : false,
 		"secure"              : false,
 		"httpOnly"            : true,
 		"domain"              : ""
@@ -89,7 +89,11 @@ component
 		variables.settings = arguments.settings;
 
 		// Default incoming cookie settings
-		structAppend( arguments.settings.cookieStorage, variables.DEFAULTS, false );
+		structAppend(
+			arguments.settings.cookieStorage,
+			variables.DEFAULTS,
+			false
+		);
 
 		// Set settings
 		variables.encryptionAlgorithm = arguments.settings.cookieStorage.encryptionAlgorithm;
