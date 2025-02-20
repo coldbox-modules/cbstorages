@@ -1,6 +1,6 @@
 {
     "name":"CBStorages",
-    "version":"3.2.0",
+    "version":"3.3.0",
     "location":"https://downloads.ortussolutions.com/ortussolutions/coldbox-modules/cbstorages/@build.version@/cbstorages-@build.version@.zip",
     "author":"Ortus Solutions.com <info@ortussolutions.com>",
     "slug":"cbstorages",
@@ -28,11 +28,9 @@
     ],
     "dependencies":{},
     "devDependencies":{
+        "commandbox-boxlang":"*",
         "commandbox-cfformat":"*",
-		"commandbox-boxlang":"*",
-        "commandbox-docbox":"*",
-        "commandbox-dotenv":"*",
-        "commandbox-cfconfig":"*"
+        "commandbox-docbox":"*"
     },
     "installPaths":{},
     "ignore":[

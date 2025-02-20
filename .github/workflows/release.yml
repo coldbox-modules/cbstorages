@@ -17,7 +17,7 @@ on:
           type: boolean
 
 env:
-  MODULE_ID: cbstorages
+  MODULE_ID: ${{ github.event.repository.name }}
   SNAPSHOT: ${{ inputs.snapshot || false }}
 
 jobs:
@@ -118,7 +118,7 @@ jobs:
           box forgebox publish --force
 
       - name: Create Github Release
-        uses: taiki-e/create-gh-release-action@v1.8.0
+        uses: taiki-e/create-gh-release-action@v1.8.2
         continue-on-error: true
         if: env.SNAPSHOT == 'false'
         with:

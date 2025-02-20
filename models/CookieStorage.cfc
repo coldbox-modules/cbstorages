@@ -18,7 +18,7 @@ component
 	property name="encryptionAlgorithm";
 
 	/**
-	 * The encryption key to use
+	 * The encryption key to use, if any.
 	 */
 	property name="encryptionKey";
 
@@ -56,9 +56,23 @@ component
 	property name="httpOnly" type="boolean";
 
 	/**
-	 * Settings
+	 * Module Settings
 	 */
 	property name="settings";
+
+	/**
+	 * Defaults
+	 */
+	variables.DEFAULTS = {
+		"encryptionAlgorithm" : "AES",
+		"encryptionKey"       : generateSecretKey( "AES", "128" ),
+		"encryptionSeed"      : "CBStorages",
+		"encryptionEncoding"  : "base64",
+		"useEncryption"       : false,
+		"secure"              : false,
+		"httpOnly"            : true,
+		"domain"              : ""
+	};
 
 	/**
 	 * Constructor
@@ -73,6 +87,13 @@ component
 
 		// Store settings
 		variables.settings = arguments.settings;
+
+		// Default incoming cookie settings
+		structAppend(
+			arguments.settings.cookieStorage,
+			variables.DEFAULTS,
+			false
+		);
 
 		// Set settings
 		variables.encryptionAlgorithm = arguments.settings.cookieStorage.encryptionAlgorithm;
