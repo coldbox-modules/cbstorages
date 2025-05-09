@@ -145,4 +145,51 @@ component accessors="true" serializable="false" {
 		return structIsEmpty( getStorage() );
 	}
 
+	/**
+	 * Builds the unique Session Key of a user request and returns it to you.
+	 * Order of discovery
+	 * 1. identifierProvider closure
+	 * 2. session identifiers
+	 * 3. cookie cfid/cftoken
+	 * 4. url cfid/cftoken
+	 * 5. request based identifier
+	 */
+	string function getSessionKey(){
+		// Setup global storage prefix according to app name in case we have multiple apps with storages
+		var prefix = "cbstorage:#getAppName()#:";
+
+		// Check jsession id First
+		var isSessionDefined = getApplicationMetadata().sessionManagement;
+		if ( isSessionDefined and structKeyExists( session, "sessionid" ) ) {
+			return prefix & session.sessionid;
+		}
+		// check session URL Token
+		else if ( isSessionDefined and structKeyExists( session, "URLToken" ) ) {
+			return prefix & session.URLToken;
+		}
+		// Check cfid and cftoken in cookie
+		else if ( structKeyExists( cookie, "CFID" ) AND structKeyExists( cookie, "CFTOKEN" ) ) {
+			return prefix & hash( cookie.cfid & cookie.cftoken );
+		}
+		// Check cfid and cftoken in URL
+		else if ( structKeyExists( URL, "CFID" ) AND structKeyExists( URL, "CFTOKEN" ) ) {
+			return prefix & hash( URL.cfid & URL.cftoken );
+		}
+		// fallback for no cookie, session or url basically sessionless requests, track the request only
+		else if ( isNull( request.cbStorageId ) ) {
+			request.cbStorageId = prefix & createUUID();
+		}
+
+		return request.cbStorageId;
+	}
+
+	/**
+	 * Get the current application's name, if not found, return an empty string
+	 */
+	string function getAppName(){
+		return application.keyExists( "applicationName" )
+			? application.applicationName
+			: "";
+	}
+
 }

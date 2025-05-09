@@ -48,7 +48,7 @@ component
 		variables.lockTimeout = 20;
 
 		// Get application name
-		variables.appName = application.applicationName;
+		variables.appName = getAppName();
 
 		// Param cacheStorage Settings
 		param arguments.settings.cacheStorage                    = {};
@@ -196,29 +196,7 @@ component
 			return prefix & variables.settings.cacheStorage.identifierProvider();
 		}
 
-		// Check jsession id First
-		var isSessionDefined = getApplicationMetadata().sessionManagement;
-		if ( isSessionDefined and structKeyExists( session, "sessionid" ) ) {
-			return prefix & session.sessionid;
-		}
-		// check session URL Token
-		else if ( isSessionDefined and structKeyExists( session, "URLToken" ) ) {
-			return prefix & session.URLToken;
-		}
-		// Check cfid and cftoken in cookie
-		else if ( structKeyExists( cookie, "CFID" ) AND structKeyExists( cookie, "CFTOKEN" ) ) {
-			return prefix & hash( cookie.cfid & cookie.cftoken );
-		}
-		// Check cfid and cftoken in URL
-		else if ( structKeyExists( URL, "CFID" ) AND structKeyExists( URL, "CFTOKEN" ) ) {
-			return prefix & hash( URL.cfid & URL.cftoken );
-		}
-		// fallback for no cookie, session or url basically sessionless requests, track the request only
-		else if ( isNull( request.cbStorageId ) ) {
-			request.cbStorageId = prefix & createUUID();
-		}
-
-		return request.cbStorageId;
+		return super.getSessionKey();
 	}
 
 }

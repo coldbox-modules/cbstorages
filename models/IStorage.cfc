@@ -121,4 +121,12 @@ interface {
 	 */
 	any function createStorage();
 
+	/****************************************** SESSION Enabling METHODS ******************************************/
+
+	/**
+	 * Builds the unique Session Key of a user request and returns it to you.
+	 */
+	string function getSessionKey();
+
+
 }
