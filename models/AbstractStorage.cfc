@@ -188,8 +188,8 @@ component accessors="true" serializable="false" {
 	 */
 	string function getAppName(){
 		return application.keyExists( "applicationName" )
-			? application.applicationName
-			: "";
+		 ? application.applicationName
+		 : "";
 	}
 
 }

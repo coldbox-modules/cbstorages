@@ -128,5 +128,4 @@ interface {
 	 */
 	string function getSessionKey();
 
-
 }
