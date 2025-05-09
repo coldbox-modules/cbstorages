@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.4.0] - 2025-05-09
+
 ### Added
 
 - `getSessionKey()` is now part of the storage interface and each storage can override it as it exists in the `AbstractStorage` class. This allows for a more consistent way of getting the session key for each storage.
@@ -170,7 +172,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Create first module version
 
-[unreleased]: https://github.com/coldbox-modules/cbstorages/compare/v3.3.0...HEAD
+[unreleased]: https://github.com/coldbox-modules/cbstorages/compare/v3.4.0...HEAD
+[3.4.0]: https://github.com/coldbox-modules/cbstorages/compare/v3.3.0...v3.4.0
 [3.3.0]: https://github.com/coldbox-modules/cbstorages/compare/v3.2.0...v3.3.0
 [3.2.0]: https://github.com/coldbox-modules/cbstorages/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/coldbox-modules/cbstorages/compare/9b01af208b6c582715b2dd02ce9678e3a6ea1532...v3.1.0
