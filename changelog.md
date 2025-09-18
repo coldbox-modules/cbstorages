@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Updated Github actions
+- BoxLang Prime Support
+
+## [3.4.0] - 2025-05-09
+
+### Added
+
 - `getSessionKey()` is now part of the storage interface and each storage can override it as it exists in the `AbstractStorage` class. This allows for a more consistent way of getting the session key for each storage.
 
 ## [3.3.0] - 2025-02-20
