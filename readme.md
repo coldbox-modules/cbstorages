@@ -59,6 +59,77 @@ Use CommandBox to install
 
 `box install cbstorages`
 
+## Usage Examples
+
+### Basic Operations
+
+```javascript
+// Get a storage instance via WireBox
+var storage = getInstance("sessionStorage@cbstorages");
+
+// Store and retrieve values
+storage.set("userName", "johndoe");
+var userName = storage.get("userName", "anonymous");
+
+// Work with complex data
+storage.set("userPrefs", { theme: "dark", lang: "en" });
+var prefs = storage.get("userPrefs");
+
+// Check existence and delete
+if (storage.exists("userName")) {
+    storage.delete("userName");
+}
+```
+
+### Method Chaining (Fluent API)
+
+Most storage methods return the storage instance, enabling fluent API usage:
+
+```javascript
+storage
+    .set("user", userData)
+    .set("session", sessionData)
+    .setMulti({
+        "lastLogin": now(),
+        "isVIP": true
+    })
+    .clearAll();
+```
+
+### Multi-Operations
+
+```javascript
+// Batch operations for efficiency
+storage.setMulti({
+    "key1": "value1",
+    "key2": "value2",
+    "key3": { complex: "data" }
+});
+
+// Retrieve multiple values at once
+var data = storage.getMulti(["key1", "key2", "key3"]);
+
+// Delete multiple keys
+var results = storage.deleteMulti(["key1", "key2"]);
+// Returns: { "key1": true, "key2": true }
+```
+
+### Get-or-Set Pattern
+
+Use `getOrSet()` for expensive operations with built-in concurrency protection:
+
+```javascript
+// Only executes the function if the key doesn't exist
+var userData = storage.getOrSet("userProfile", function(){
+    return userService.getComplexUserData(userId);
+});
+
+// Perfect for caching expensive calculations
+var report = storage.getOrSet("monthlyReport", function(){
+    return reportService.generateMonthlyReport();
+});
+```
+
 ## WireBox Mappings
 
 The module registers the following storage mappings:
@@ -259,6 +330,112 @@ interface {
 	 */
 	any function createStorage();
 
+}
+```
+
+## Storage Lifecycle & Utility Methods
+
+Beyond the basic CRUD operations, each storage provides lifecycle and utility methods:
+
+```javascript
+// Storage information
+var size = storage.getSize();           // Get number of stored items
+var keys = storage.getKeys();           // Get array of all keys
+var empty = storage.isEmpty();          // Check if storage is empty
+
+// Storage lifecycle (advanced usage)
+var exists = storage.storageExists();   // Check if underlying storage exists
+storage.createStorage();                // Initialize storage if needed
+storage.removeStorage();                // Completely destroy storage
+var scope = storage.getStorage();       // Get entire storage structure
+```
+
+## Advanced Patterns
+
+### Error Handling
+
+```javascript
+// Safe retrieval with defaults
+var userPrefs = storage.get("preferences", {});
+
+// Check storage availability for distributed scenarios
+if (storage.storageExists()) {
+    var data = storage.get("importantData");
+} else {
+    storage.createStorage();
+}
+
+// Null vs undefined handling
+var value = storage.get("mayNotExist");
+if (!isNull(value)) {
+    // Value exists (could be empty string, 0, false, etc.)
+}
+```
+
+### Distributed Session Management
+
+```javascript
+// Configure CacheStorage for distributed sessions
+moduleSettings = {
+    cbStorages: {
+        cacheStorage: {
+            cachename: "redis",  // Your distributed cache
+            timeout: 60,
+            identifierProvider: function(){
+                // Custom session tracking
+                return cookie.myAppSessionId ?: createUUID();
+            }
+        }
+    }
+};
+
+// Use exactly like regular session storage
+var cache = getInstance("cacheStorage@cbstorages");
+cache.set("cart", shoppingCartData);
+cache.set("userState", currentUserState);
+```
+
+### Cookie Storage with Encryption
+
+```javascript
+// Configure encrypted cookie storage
+moduleSettings = {
+    cbStorages: {
+        cookieStorage: {
+            useEncryption: true,
+            secure: true,        // HTTPS only
+            httpOnly: true,      // No JavaScript access
+            domain: ".mysite.com"
+        }
+    }
+};
+
+// Values are automatically encrypted/decrypted
+var cookieStorage = getInstance("cookieStorage@cbstorages");
+cookieStorage.set("sensitiveData", userData);  // Encrypted automatically
+var data = cookieStorage.get("sensitiveData"); // Decrypted automatically
+```
+
+## Testing
+
+When testing with cbstorages, especially CacheStorage:
+
+```javascript
+component extends="coldbox.system.testing.BaseTestCase" {
+    function beforeEach() {
+        // Important: Setup new request context
+        setup();
+
+        // Get fresh storage instance
+        storage = getInstance("sessionStorage@cbstorages");
+        storage.clearAll();
+    }
+
+    function testStorageOperations() {
+        storage.set("test", "value");
+        expect(storage.get("test")).toBe("value");
+        expect(storage.exists("test")).toBeTrue();
+    }
 }
 ```
 

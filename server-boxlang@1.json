@@ -13,7 +13,7 @@
         },
 		"webroot": "test-harness",
 		"aliases":{
-            "/moduleroot/@MODULE_NAME@":"../"
+            "/moduleroot/cbstorages":"../"
         }
     },
     "JVM":{
