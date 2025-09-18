@@ -57,7 +57,8 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root" {
 
 				// Delete Tests
 				storage.delete( "tester" );
-				if ( structKeyExists( server, "lucee" ) ) {
+
+				if( isLucee() || isBoxLang() ){
 					expect( storage.get( "tester" ) ).toBeNull();
 				} else {
 					// Empty because we are in the same request
