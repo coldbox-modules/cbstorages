@@ -1,9 +1,9 @@
+[![Total Downloads](https://forgebox.io/api/v1/entry/cbstorages/badges/downloads)](https://forgebox.io/view/cbstorages)
+[![Latest Stable Version](https://forgebox.io/api/v1/entry/cbstorages/badges/version)](https://forgebox.io/view/cbstorages)
+[![Apache2 License](https://img.shields.io/badge/License-Apache2-blue.svg)](https://forgebox.io/view/cbstorages)
+
 <p align="center">
-	<img src="https://www.ortussolutions.com/__media/coldbox-185-logo.png">
-	<br>
-	<img src="https://www.ortussolutions.com/__media/wirebox-185.png" height="125">
-	<img src="https://www.ortussolutions.com/__media/cachebox-185.png" height="125" >
-	<img src="https://www.ortussolutions.com/__media/logbox-185.png"  height="125">
+	<img src="https://www.ortussolutions.com/__media/coldbox-185-logo.png" alt="ColdBox Platform Logo">
 </p>
 
 <p align="center">
