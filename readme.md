@@ -49,7 +49,7 @@ Apache License, Version 2.0.
 
 ## Requirements
 
-- BoxLang 1.0+
+- BoxLang 1.0+ (Preferred)
 - Lucee 5+
 - ColdFusion 2023+
 

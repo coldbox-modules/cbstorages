@@ -1,5 +1,5 @@
 {
-	"name":"cbstorages-boxlang@1",
+    "name":"cbstorages-boxlang@1",
     "app":{
         "serverHomeDirectory":".engine/boxlang",
         "cfengine":"boxlang@1"
@@ -9,10 +9,10 @@
             "port":"60299"
         },
         "rewrites":{
-            "enable": true
+            "enable":true
         },
-		"webroot": "test-harness",
-		"aliases":{
+        "webroot":"test-harness",
+        "aliases":{
             "/moduleroot/cbstorages":"../"
         }
     },
@@ -21,13 +21,12 @@
         "javaVersion":"openjdk21_jre",
         "args":"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8888"
     },
-	"openBrowser":"false",
+    "openBrowser":"false",
     "cfconfig":{
         "file":".cfconfig.json"
     },
     "env":{
-		"BOXLANG_DEBUG":true
+        "BOXLANG_DEBUG":true
     },
-    "scripts":{
-    }
+    "scripts":{}
 }

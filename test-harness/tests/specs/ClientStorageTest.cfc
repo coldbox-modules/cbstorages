@@ -19,15 +19,15 @@ component extends="coldbox.system.testing.BaseTestCase" skip="isBoxLang" {
 	/*********************************** LIFE CYCLE Methods ***********************************/
 
 	function beforeAll(){
-		structClear( client );
 		super.beforeAll();
+		//structClear( client );
 		// do your own stuff here
 	}
 
 	function afterAll(){
-		structClear( client );
 		// do your own stuff here
 		super.afterAll();
+		//structClear( client );
 	}
 
 	/*********************************** BDD SUITES ***********************************/
@@ -37,8 +37,8 @@ component extends="coldbox.system.testing.BaseTestCase" skip="isBoxLang" {
 			beforeEach( function( currentSpec ){
 				// Setup as a new ColdBox request, VERY IMPORTANT. ELSE EVERYTHING LOOKS LIKE THE SAME REQUEST.
 				setup();
-				storage = getInstance( "clientStorage@cbstorages" );
-				storage.clearAll();
+				variables.storage = getInstance( "clientStorage@cbstorages" );
+				variables.storage.clearAll();
 			} );
 
 

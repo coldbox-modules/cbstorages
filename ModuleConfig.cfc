@@ -18,7 +18,7 @@ component {
 	 * Configure
 	 */
 	function configure(){
-		settings = {
+		variables.settings = {
 			// Cache Storage Settings
 			cacheStorage : {
 				// The CacheBox registered cache to store data in

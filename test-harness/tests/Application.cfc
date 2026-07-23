@@ -50,7 +50,7 @@ component {
 
 		// ORM Reload for fresh results
 		if ( structKeyExists( url, "fwreinit" ) ) {
-			if ( structKeyExists( server, "lucee" ) ) {
+			if ( structKeyExists( server, "boxlang" ) ) {
 				pagePoolClear();
 			}
 			// ormReload();

@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- BoxLang prime updates
+- Updated github actions
+- AI Integration for code generation and refactoring
+
 ## [3.5.0] - 2025-09-18
 
 ### Added
