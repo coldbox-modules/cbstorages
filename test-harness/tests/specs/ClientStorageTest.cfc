@@ -20,14 +20,14 @@ component extends="coldbox.system.testing.BaseTestCase" skip="isBoxLang" {
 
 	function beforeAll(){
 		super.beforeAll();
-		//structClear( client );
+		// structClear( client );
 		// do your own stuff here
 	}
 
 	function afterAll(){
 		// do your own stuff here
 		super.afterAll();
-		//structClear( client );
+		// structClear( client );
 	}
 
 	/*********************************** BDD SUITES ***********************************/
