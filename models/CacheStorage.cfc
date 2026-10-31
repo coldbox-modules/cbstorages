@@ -44,7 +44,6 @@ component
 	 */
 	function init( required settings, required cachebox ){
 		// Locks
-		variables.lockName    = hash( now() ) & "_CACHE_STORAGE";
 		variables.lockTimeout = 20;
 
 		// Get application name
@@ -55,13 +54,29 @@ component
 		param arguments.settings.cacheStorage.cacheName          = "template";
 		param arguments.settings.cacheStorage.timeout            = 60;
 		param arguments.settings.cacheStorage.identifierProvider = "";
+		param arguments.settings.cacheStorage.lockProvider       = "";
+		if (
+			!isCustomFunction( arguments.settings.cacheStorage.lockProvider ) &&
+			!(
+				isSimpleValue( arguments.settings.cacheStorage.lockProvider ) && arguments.settings.cacheStorage.lockProvider == ""
+			)
+		) {
+			throw(
+				type    = "CacheStorage.InvalidLockProvider",
+				message = "cacheStorage.lockProvider must be a callback or an empty string"
+			);
+		}
 
 		// Store module settings
 		variables.settings = arguments.settings;
+		variables.lockName = "cbstorages.CacheStorage." & hash(
+			arguments.settings.cacheStorage.cacheName,
+			"SHA-256"
+		);
 		// Default timeout
-		variables.timeout  = arguments.settings.cacheStorage.timeout;
+		variables.timeout = arguments.settings.cacheStorage.timeout;
 		// Assemble Provider
-		variables.cache    = arguments.cachebox.getCache( variables.settings.cacheStorage.cachename );
+		variables.cache   = arguments.cachebox.getCache( variables.settings.cacheStorage.cachename );
 
 		return this;
 	}
@@ -75,13 +90,44 @@ component
 	 * @return cbstorages.models.IStorage
 	 */
 	CacheStorage function set( required name, required value ){
-		var storage               = getStorage();
-		// store in bucket
-		storage[ arguments.name ] = arguments.value;
-		// save it back in cache
-		cache.set( getSessionKey(), storage, variables.timeout, 0 );
-
+		var key         = getSessionKey();
+		var field       = arguments.name;
+		var storedValue = arguments.value;
+		withStorageLock( key, function(){
+			var storage      = readStorage( key );
+			storage[ field ] = storedValue;
+			writeStorage( key, storage );
+		} );
 		return this;
+	}
+
+	/** Set all fields in one protected read/modify/write operation. */
+	CacheStorage function setMulti( required struct map ){
+		var key    = getSessionKey();
+		var values = arguments.map;
+		withStorageLock( key, function(){
+			var storage = readStorage( key );
+			structAppend( storage, values, true );
+			writeStorage( key, storage );
+		} );
+		return this;
+	}
+
+	/** Coordinate production with the same bucket lock used by other mutations. */
+	any function getOrSet( required name, required any produce ){
+		var key      = getSessionKey();
+		var field    = arguments.name;
+		var producer = arguments.produce;
+		return withStorageLock( key, function(){
+			var storage = readStorage( key );
+			if ( structKeyExists( storage, field ) && !isNull( storage[ field ] ) ) {
+				return storage[ field ];
+			}
+			var value        = producer();
+			storage[ field ] = value;
+			writeStorage( key, storage );
+			return value;
+		} );
 	}
 
 	/**
@@ -108,15 +154,17 @@ component
 	 * @name The name of the data key
 	 */
 	boolean function delete( required name ){
-		var storage = getStorage();
-		// verify and delete
-		if ( structKeyExists( storage, arguments.name ) ) {
-			structDelete( storage, arguments.name );
-			// store it back
-			cache.set( getSessionKey(), storage, variables.timeout, 0 );
-			return true;
-		}
-		return false;
+		var key   = getSessionKey();
+		var field = arguments.name;
+		return withStorageLock( key, function(){
+			var storage = readStorage( key );
+			if ( structKeyExists( storage, field ) ) {
+				structDelete( storage, field );
+				writeStorage( key, storage );
+				return true;
+			}
+			return false;
+		} );
 	}
 
 	/**
@@ -125,8 +173,7 @@ component
 	 * @return cbstorages.models.IStorage
 	 */
 	CacheStorage function clearAll(){
-		createStorage();
-		return this;
+		return createStorage();
 	}
 
 	/**
@@ -134,12 +181,19 @@ component
 	 */
 	struct function getStorage(){
 		var cacheKey = getSessionKey();
+		return withStorageLock( cacheKey, function(){
+			return readStorage( cacheKey );
+		} );
+	}
+
+	/** Called only while holding the bucket lock, including first-use initialization. */
+	private struct function readStorage( required string cacheKey ){
 		// get map from cache
-		var storage  = cache.get( cacheKey );
+		var storage = variables.cache.get( arguments.cacheKey );
 		// Verify, else create it
 		if ( isNull( local.storage ) ) {
 			storage = { "sessionid" : cacheKey, "timecreated" : now() };
-			cache.set( cacheKey, storage, variables.timeout, 0 );
+			writeStorage( arguments.cacheKey, storage );
 		}
 
 		return storage;
@@ -151,7 +205,10 @@ component
 	 * @return cbstorages.models.IStorage
 	 */
 	CacheStorage function removeStorage(){
-		cache.clear( getSessionKey() );
+		var key = getSessionKey();
+		withStorageLock( key, function(){
+			variables.cache.clear( key );
+		} );
 		return this;
 	}
 
@@ -170,13 +227,38 @@ component
 	 */
 	CacheStorage function createStorage(){
 		var cacheKey = getSessionKey();
-
-		cache.set( cacheKey, {}, variables.timeout, 0 );
+		withStorageLock( cacheKey, function(){
+			writeStorage( cacheKey, {} );
+		} );
 
 		return this;
 	}
 
 	/**************************** CONCRETE METHODS ****************************/
+
+	private function writeStorage( required string cacheKey, required struct storage ){
+		variables.cache.set(
+			arguments.cacheKey,
+			arguments.storage,
+			variables.timeout,
+			0
+		);
+	}
+
+	/** A distributed provider must execute the operation synchronously and exclusively. */
+	private any function withStorageLock( required string cacheKey, required any operation ){
+		var name = variables.lockName & "." & hash( arguments.cacheKey, "SHA-256" );
+		if ( isCustomFunction( variables.settings.cacheStorage.lockProvider ) ) {
+			return variables.settings.cacheStorage.lockProvider(
+				name,
+				arguments.operation,
+				variables.lockTimeout
+			);
+		}
+		lock name=name type="exclusive" timeout=variables.lockTimeout throwOnTimeout=true {
+			return arguments.operation();
+		}
+	}
 
 	/**
 	 * Builds the unique Session Key of a user request and returns it to you.
