@@ -8,22 +8,40 @@ component extends="testbox.system.BaseSpec" {
 				variables.storage = buildStorage();
 				variables.other   = buildStorage();
 				variables.storage.createStorage();
+				// Adobe copies complex thread attributes. Resolve shared objects by a scalar key instead.
+				variables.fixtureKey                = "cbstoragesConcurrency" & replace( createUUID(), "-", "", "all" );
+				variables.threadNames               = [];
+				application[ variables.fixtureKey ] = {
+					storage : variables.storage,
+					other   : variables.other,
+					count   : createObject( "java", "java.util.concurrent.atomic.AtomicInteger" ).init( 0 ),
+					results : createObject( "java", "java.util.concurrent.ConcurrentHashMap" ).init()
+				};
+			} );
+
+			afterEach( function(){
+				if ( arrayLen( variables.threadNames ) ) {
+					thread action="join" name=arrayToList( variables.threadNames ) timeout=25000;
+				}
+				structDelete( application, variables.fixtureKey );
 			} );
 
 			it( "preserves both writes from independent storage instances", function(){
 				var firstName  = "storageFirst" & replace( createUUID(), "-", "", "all" );
 				var secondName = "storageSecond" & replace( createUUID(), "-", "", "all" );
 				variables.cache.delayNextRead();
-				thread name=firstName action="run" storage=variables.storage {
-					attributes.storage.set( "first", 1 );
+				thread name=firstName action="run" fixtureKey=variables.fixtureKey {
+					application[ attributes.fixtureKey ].storage.set( "first", 1 );
 				}
+				variables.threadNames.append( firstName );
 				var started = variables.cache.firstRead.await(
 					javacast( "long", 5 ),
 					createObject( "java", "java.util.concurrent.TimeUnit" ).SECONDS
 				);
-				thread name=secondName action="run" storage=variables.other {
-					attributes.storage.set( "second", 2 );
+				thread name=secondName action="run" fixtureKey=variables.fixtureKey {
+					application[ attributes.fixtureKey ].other.set( "second", 2 );
 				}
+				variables.threadNames.append( secondName );
 				thread action="join" name="#firstName#,#secondName#" timeout=10000;
 				expect( started ).toBeTrue();
 				expect( cfthread[ firstName ].status ).toBe( "COMPLETED" );
@@ -33,29 +51,33 @@ component extends="testbox.system.BaseSpec" {
 			} );
 
 			it( "produces a missing value once across independent instances and preserves false", function(){
-				var results    = createObject( "java", "java.util.concurrent.ConcurrentHashMap" ).init();
-				var count      = createObject( "java", "java.util.concurrent.atomic.AtomicInteger" ).init( 0 );
+				var results    = application[ variables.fixtureKey ].results;
+				var count      = application[ variables.fixtureKey ].count;
 				var firstName  = "produceFirst" & replace( createUUID(), "-", "", "all" );
 				var secondName = "produceSecond" & replace( createUUID(), "-", "", "all" );
 				variables.cache.delayNextRead();
-				thread name=firstName action="run" storage=variables.storage count=count results=results {
-					var value = attributes.storage.getOrSet( "flag", function(){
-						attributes.count.incrementAndGet();
+				thread name=firstName action="run" fixtureKey=variables.fixtureKey {
+					var fixture = application[ attributes.fixtureKey ];
+					var value   = fixture.storage.getOrSet( "flag", function(){
+						fixture.count.incrementAndGet();
 						return false;
 					} );
-					attributes.results.put( "first", value );
+					fixture.results.put( "first", value );
 				}
+				variables.threadNames.append( firstName );
 				var started = variables.cache.firstRead.await(
 					javacast( "long", 5 ),
 					createObject( "java", "java.util.concurrent.TimeUnit" ).SECONDS
 				);
-				thread name=secondName action="run" storage=variables.other count=count results=results {
-					var value = attributes.storage.getOrSet( "flag", function(){
-						attributes.count.incrementAndGet();
+				thread name=secondName action="run" fixtureKey=variables.fixtureKey {
+					var fixture = application[ attributes.fixtureKey ];
+					var value   = fixture.other.getOrSet( "flag", function(){
+						fixture.count.incrementAndGet();
 						return false;
 					} );
-					attributes.results.put( "second", value );
+					fixture.results.put( "second", value );
 				}
+				variables.threadNames.append( secondName );
 				thread action="join" name="#firstName#,#secondName#" timeout=10000;
 				expect( started ).toBeTrue();
 				expect( cfthread[ firstName ].status ).toBe( "COMPLETED" );
