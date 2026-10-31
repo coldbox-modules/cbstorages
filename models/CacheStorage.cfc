@@ -90,12 +90,12 @@ component
 	 * @return cbstorages.models.IStorage
 	 */
 	CacheStorage function set( required name, required value ){
-		var key   = getSessionKey();
-		var field = arguments.name;
-		var value = arguments.value;
+		var key         = getSessionKey();
+		var field       = arguments.name;
+		var storedValue = arguments.value;
 		withStorageLock( key, function(){
 			var storage      = readStorage( key );
-			storage[ field ] = value;
+			storage[ field ] = storedValue;
 			writeStorage( key, storage );
 		} );
 		return this;
