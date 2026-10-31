@@ -382,8 +382,12 @@ moduleSettings = {
             cachename: "redis",  // Your distributed cache
             timeout: 60,
             identifierProvider: function(){
-                // Custom session tracking
-                return cookie.myAppSessionId ?: createUUID();
+                // Return a stable, validated browser identifier issued by your application.
+                return cookie.myAppSessionId;
+            },
+            lockProvider: function(name, operation, timeout){
+                // An application-supplied distributed locking service; not bundled here.
+                return application.distributedLocks.withLock(name, operation, timeout);
             }
         }
     }
@@ -394,6 +398,53 @@ var cache = getInstance("cacheStorage@cbstorages");
 cache.set("cart", shoppingCartData);
 cache.set("userState", currentUserState);
 ```
+
+`CacheStorage` protects each bucket's read/modify/write operations with a named lock.
+The default lock coordinates storage instances within one JVM. A remote CacheBox
+provider alone does **not** coordinate mutations on different application servers:
+two writers can read the same bucket and overwrite each other's changes.
+
+For multiple servers, configure `cacheStorage.lockProvider` on every server. This
+optional callback receives `(name, operation, timeout)`, where `name` is a stable,
+opaque lock name derived from the cache region and session key, `operation` is a
+zero-argument callback, and `timeout` is the acquisition timeout in seconds
+(default `20`, configurable with `setLockTimeout()`). The provider must:
+
+- Acquire exclusive ownership in a lock namespace shared by all writers.
+- Execute `operation()` exactly once, synchronously, while ownership remains valid,
+  and return its result unchanged.
+- Throw without executing the operation when acquisition fails.
+- Release ownership in `finally`, including when the operation throws. If using
+  expiring leases, ensure the lease cannot expire while the operation is running;
+  use appropriate renewal or fencing rather than relying on the acquisition timeout.
+
+Use matching cache-region names, application names, and stable browser identifiers
+on every server sharing a bucket. Coordinate other applications that write to the
+same bucket through the same lock as well. cbStorages does not add a Redis dependency
+or provide the distributed lock service.
+
+The same lock protects `set`, `setMulti`, `delete`, `getOrSet`, `createStorage`,
+`clearAll`, `removeStorage`, and initialization by `getStorage`. `setMulti` saves the
+bucket once. `getOrSet` runs a missing value's producer while holding this bucket
+lock; keep producers short and avoid recursively accessing the same bucket from
+inside the producer. Multi-step sequences of separate method calls are not one
+transaction. Mutating the struct returned by `getStorage()` directly bypasses these
+protections; use the storage methods to persist changes.
+
+`timeout` is in minutes and is supplied to CacheBox when the bucket is saved.
+Writes reset this timeout; reads of an existing bucket do not resave it or request
+an idle timeout (`lastAccessTimeout` is `0`). Provider-specific read/expiry behavior
+still applies. Signing cookies and rotating browser
+identifiers after authentication remain the application's responsibility.
+
+Focused concurrency regression tests can run without a web server:
+
+```bash
+box task run taskFile=tasks/TestCacheStorage.cfc
+```
+
+Install `test-harness` development dependencies first, or pass
+`:testboxPath=/path/to/testbox` to use an existing TestBox installation.
 
 ### Cookie Storage with Encryption
 
